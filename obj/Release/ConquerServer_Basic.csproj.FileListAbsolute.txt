@@ -1,0 +1,20 @@
+C:\Users\Sher\AppData\Local\Temporary Projects\ConquerServer_Basic\obj\Release\ResolveAssemblyReference.cache
+C:\Users\Sher\AppData\Local\Temporary Projects\ConquerServer_Basic\bin\Release\ConquerServer_Basic.exe
+C:\Users\Sher\AppData\Local\Temporary Projects\ConquerServer_Basic\bin\Release\ConquerServer_Basic.pdb
+C:\Users\Sher\AppData\Local\Temporary Projects\ConquerServer_Basic\bin\Release\SocketNetwork.dll
+C:\Users\Sher\AppData\Local\Temporary Projects\ConquerServer_Basic\bin\Release\SocketNetwork.pdb
+C:\Users\Sher\AppData\Local\Temporary Projects\ConquerServer_Basic\obj\Release\ConquerServer_Basic.exe
+C:\Users\Sher\AppData\Local\Temporary Projects\ConquerServer_Basic\obj\Release\ConquerServer_Basic.pdb
+C:\Users\Sher\Documents\Visual Studio 2008\Projects\ConquerServer_Basic\ConquerServer_Basic\obj\Release\ConquerServer_Basic.exe
+C:\Users\Sher\Documents\Visual Studio 2008\Projects\ConquerServer_Basic\ConquerServer_Basic\obj\Release\ConquerServer_Basic.pdb
+C:\Users\Sher\Documents\Visual Studio 2008\Projects\ConquerServer_Basic\ConquerServer_Basic\bin\Debug\ConquerServer_Basic.exe
+C:\Users\Sher\Documents\Visual Studio 2008\Projects\ConquerServer_Basic\ConquerServer_Basic\bin\Debug\ConquerServer_Basic.pdb
+C:\Users\Sher\Documents\Visual Studio 2008\Projects\ConquerServer_Basic\ConquerServer_Basic\bin\Debug\SocketNetwork.pdb
+C:\Users\Sher\Documents\Visual Studio 2008\Projects\ConquerServer_Basic\ConquerServer_Basic\obj\Release\ResolveAssemblyReference.cache
+C:\Users\Sher\Documents\Visual Studio 2008\Projects\ConquerServer_Basic\ConquerServer_Basic\bin\Debug\SocketNetwork.dll
+C:\Documents and Settings\Computer\My Documents\Downloads\New Folder\ConquerServer_Basic\obj\Release\ResolveAssemblyReference.cache
+C:\Documents and Settings\Computer\My Documents\Downloads\New Folder\ConquerServer_Basic\obj\Release\ConquerServer_Basic.exe
+C:\Documents and Settings\Computer\My Documents\Downloads\New Folder\ConquerServer_Basic\bin\Debug\ConquerServer_Basic.exe
+C:\Documents and Settings\Computer\My Documents\Downloads\New Folder\ConquerServer_Basic\bin\Debug\ConquerServer_Basic.pdb
+C:\Documents and Settings\Computer\My Documents\Downloads\New Folder\ConquerServer_Basic\bin\Debug\SocketNetwork.pdb
+C:\Documents and Settings\Computer\My Documents\Downloads\New Folder\ConquerServer_Basic\obj\Release\ConquerServer_Basic.pdb
