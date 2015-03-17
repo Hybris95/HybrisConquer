@@ -61,7 +61,6 @@ namespace ConquerServer_Basic.Conquer_Structures
 
                 for (uint i = 0; i < spawn.SpawnAmount; i++)
                 {
-
                     Entity newMob = new Entity(EntityFlag.Monster, null);
                     newMob.Action = ConquerAction.None;
                     newMob.Dead = false;
@@ -103,6 +102,8 @@ namespace ConquerServer_Basic.Conquer_Structures
 
         static public void Load()
         {
+            // TODO - Create the file if not exists
+            // TODO - Pass this in the database
             string[] FSpawns = File.ReadAllLines(Application.StartupPath+@"//MobSpawns.txt");
             ushort mobspawn = 1;
             foreach (string Spawn in FSpawns)

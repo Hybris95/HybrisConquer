@@ -262,6 +262,7 @@ namespace ConquerServer_Basic.Npc_Dialog.Twin_City
                             }
                         }
                         Kernel.Guilds.Remove(Hero.MyGuild.ID);
+                        // TODO - Save Guilds in Database instead of Flat File
                         File.Delete(Misc.DatabasePath + @"/Guilds/" + Hero.MyGuild.ID + ".ini");
                         Message.Global(Hero.Entity.Name + " disbanded his Guild " + Hero.MyGuild.Name + "!", (uint)Color.White, MessagePacket.Center);
                         Hero.MyGuild = null;

@@ -130,6 +130,7 @@ namespace ConquerServer_Basic
         
         static public void LoadInventory(GameClient Hero)
         {
+            // TODO - Load Inventory from database instead of Flat File
             IniFile rdr = new IniFile(Misc.DatabasePath + @"\Inventory\" + Hero.Username + ".ini");
             sbyte count = rdr.ReadSByte("Inventory", "Count", 0);
             for (sbyte i = 0; i < count; i++)
@@ -151,6 +152,7 @@ namespace ConquerServer_Basic
         }
         static public void SaveInventory(GameClient Hero)
         {
+            // TODO - Save the inventory in database instead of flat file
             if (File.Exists(Misc.DatabasePath + @"\Inventory\" + Hero.Username + ".ini"))
                 File.Delete(Misc.DatabasePath + @"\Inventory\" + Hero.Username + ".ini");
             IniFile wrtr = new IniFile(Misc.DatabasePath + @"\Inventory\" + Hero.Username + ".ini");
@@ -178,6 +180,7 @@ namespace ConquerServer_Basic
 
         static public void LoadProfs(GameClient Hero)
         {
+            // TODO - Load Profs in Database instead of Flat File
             IniFile rdr = new IniFile(Misc.DatabasePath + @"\Profs\" + Hero.Username + ".ini");
             sbyte count = rdr.ReadSByte("Prof", "Count", 0);
             for (sbyte i = 0; i < count; i++)
@@ -192,6 +195,7 @@ namespace ConquerServer_Basic
         }
         static public void SaveProfs(GameClient Hero)
         {
+            // TODO - Save Profs in Database instead of Flat File
             if (File.Exists(Misc.DatabasePath + @"\Profs\" + Hero.Username + ".ini"))
                 File.Delete(Misc.DatabasePath + @"\Profs\" + Hero.Username + ".ini");
             IniFile wrtr = new IniFile(Misc.DatabasePath + @"\Profs\" + Hero.Username + ".ini");
@@ -207,6 +211,7 @@ namespace ConquerServer_Basic
 
         static public void LoadSkills(GameClient Hero)
         {
+            // TODO - Load Skills from Database instead of Flat File
             IniFile rdr = new IniFile(Misc.DatabasePath + @"\Skills\" + Hero.Username + ".ini");
             sbyte count = rdr.ReadSByte("Skill", "Count", 0);
             for (sbyte i = 0; i < count; i++)
@@ -221,6 +226,7 @@ namespace ConquerServer_Basic
         }
         static public void SaveSkills(GameClient Hero)
         {
+            // TODO - Save Skills in Database instead of Flat File
             if (File.Exists(Misc.DatabasePath + @"\Skills\" + Hero.Username + ".ini"))
                 File.Delete(Misc.DatabasePath + @"\Skills\" + Hero.Username + ".ini");
             IniFile wrtr = new IniFile(Misc.DatabasePath + @"\Skills\" + Hero.Username + ".ini");

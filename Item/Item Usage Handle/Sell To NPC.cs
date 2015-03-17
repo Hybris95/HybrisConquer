@@ -20,6 +20,7 @@ namespace ConquerServer_Basic.Item
             SoldItem = Hero.GetInventoryItem(ItemUID);
 
             ItemID = SoldItem.ID;
+            // TODO - Load Items from Database instead of Flat File
             if (File.Exists( System.Windows.Forms.Application.StartupPath+ @"/Items/" + ItemID + ".ini"))
             {
                 IniFile ini = new IniFile(System.Windows.Forms.Application.StartupPath + @"/Items/" + ItemID + ".ini");

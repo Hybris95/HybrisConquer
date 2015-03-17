@@ -20,6 +20,7 @@ namespace ConquerServer_Basic
         static public string DatabasePath;
         public static void SaveEmpire()
         {
+            // TODO - Save Empire in Database instead of Flat File
             FileStream FS = new FileStream("nobility.dat", FileMode.OpenOrCreate);
             BinaryWriter BW = new BinaryWriter(FS);
 
@@ -35,6 +36,7 @@ namespace ConquerServer_Basic
         {
             try
             {
+                // TODO - Load Empire from Database instead of Flat File
                 if (System.IO.File.Exists("nobility.dat"))
                 {
                     FileStream FS = new FileStream("nobility.dat", FileMode.Open);
@@ -60,12 +62,13 @@ namespace ConquerServer_Basic
 
         static public void LoadSettings()
         {
+            // TODO - Check if settings.txt is available, if not create it with default config
             using (StreamReader reader = new StreamReader("settings.txt"))
             {
                 string[] Input = reader.ReadToEnd().Split('\n');
                 for (int I = 0; I < Input.Length; I++)
                 {
-                    Input[I] = Input[I].Trim(); ;
+                    Input[I] = Input[I].Trim();
                     string[] Line = Input[I].Split('=');
                     switch (Line[0])
                     {

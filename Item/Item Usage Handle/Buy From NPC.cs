@@ -28,6 +28,7 @@ namespace ConquerServer_Basic.Item
                     MoneyType = 2;
                     break;
             }
+            // TODO - Load Items from Database instead of Flat File
             if (File.Exists(System.Windows.Forms.Application.StartupPath + @"/Items/" + Item + ".ini"))
             {
                 IniFile ini = new IniFile(System.Windows.Forms.Application.StartupPath + @"/Items/" + Item + ".ini");

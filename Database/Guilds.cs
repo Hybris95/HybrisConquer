@@ -12,9 +12,10 @@ namespace ConquerServer_Basic.Database
     {
         static public void LoadGuilds()
         {
+            // TODO - Create the directory if not exist
+            // TODO - Pass this on the database
             foreach (string file in Directory.GetFiles(Misc.DatabasePath + "\\Guilds\\"))
             {
-
                 IniFile read = new IniFile(file);
                 Guild guild = new Guild();
                 guild.ID = read.ReadUInt16("Guild", "ID", 0);
