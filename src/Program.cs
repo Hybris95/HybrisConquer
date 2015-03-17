@@ -287,6 +287,7 @@ namespace ConquerServer_Basic
 
         public static void StopServer()
         {
+            // TODO - Save everyone before shutting down
             serverEnabled = false;
         }
 

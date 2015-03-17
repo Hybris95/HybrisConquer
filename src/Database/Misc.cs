@@ -18,10 +18,19 @@ namespace ConquerServer_Basic
     public class Misc
     {
         static public string DatabasePath;
+        private static string empireFile = "nobility.dat";
+        private static string settingsFile = "settings.txt";
+        private static string shopFile = @"Misc\Shop.ini";
+
+        private static string defaultGameIp = "127.0.0.1";
+        private static string defaultUserName = "root";
+        private static string defaultPassword = "";
+        private static string defaultDatabase = "ConquerServer";
+
         public static void SaveEmpire()
         {
             // TODO - Save Empire in Database instead of Flat File
-            FileStream FS = new FileStream("nobility.dat", FileMode.OpenOrCreate);
+            FileStream FS = new FileStream(empireFile, FileMode.OpenOrCreate);
             BinaryWriter BW = new BinaryWriter(FS);
 
             for (int i = 0; i < Empire.EmpireBoard.Length; i++)
@@ -37,9 +46,9 @@ namespace ConquerServer_Basic
             try
             {
                 // TODO - Load Empire from Database instead of Flat File
-                if (System.IO.File.Exists("nobility.dat"))
+                if (System.IO.File.Exists(empireFile))
                 {
-                    FileStream FS = new FileStream("nobility.dat", FileMode.Open);
+                    FileStream FS = new FileStream(empireFile, FileMode.Open);
                     BinaryReader BR = new BinaryReader(FS);
 
                     for (int i = 0; i < Empire.EmpireBoard.Length; i++)
@@ -62,30 +71,49 @@ namespace ConquerServer_Basic
 
         static public void LoadSettings()
         {
-            // TODO - Check if settings.txt is available, if not create it with default config
-            using (StreamReader reader = new StreamReader("settings.txt"))
+            if (File.Exists(settingsFile))
             {
-                string[] Input = reader.ReadToEnd().Split('\n');
-                for (int I = 0; I < Input.Length; I++)
+                using (StreamReader reader = new StreamReader(settingsFile))
                 {
-                    Input[I] = Input[I].Trim();
-                    string[] Line = Input[I].Split('=');
-                    switch (Line[0])
+                    string[] Input = reader.ReadToEnd().Split('\n');
+                    for (int i = 0; i < Input.Length; i++)
                     {
-                        case "IP":
-                            Program.GameIp = Line[1];
-                            break;
-                        case "USERNAME":
-                            Program.Username = Line[1];
-                            break;
-                        case "PASSWORD":
-                            Program.Password = Line[1];
-                            break;
-                        case "DATABASE":
-                            Program.Host = Line[1];
-                            break;
+                        Input[i] = Input[i].Trim();
+                        string[] Line = Input[i].Split('=');
+                        switch (Line[0])
+                        {
+                            case "IP":
+                                Program.GameIp = Line.Length > 1 ? Line[1] : defaultGameIp;
+                                break;
+                            case "USERNAME":
+                                Program.Username = Line.Length > 1 ? Line[1] : defaultUserName;
+                                break;
+                            case "PASSWORD":
+                                Program.Password = Line.Length > 1 ? Line[1] : defaultPassword;
+                                break;
+                            case "DATABASE":
+                                Program.Host = Line.Length > 1 ? Line[1] : defaultDatabase;
+                                break;
+                        }
+                        DatabasePath = Application.StartupPath;
                     }
-                    DatabasePath = Application.StartupPath;
+                }
+            }
+            else
+            {
+                using (FileStream fW = new FileStream(settingsFile, FileMode.CreateNew))
+                {
+                    using (StreamWriter sW = new StreamWriter(fW))
+                    {
+                        sW.WriteLine("IP={0}", defaultGameIp);
+                        sW.WriteLine("USERNAME={0}", defaultUserName);
+                        sW.WriteLine("PASSWORD={0}", defaultPassword);
+                        sW.WriteLine("DATABASE={0}", defaultDatabase);
+                        Program.GameIp = defaultGameIp;
+                        Program.Username = defaultUserName;
+                        Program.Password = defaultPassword;
+                        Program.Host = defaultDatabase;
+                    }
                 }
             }
         }
@@ -254,7 +282,8 @@ namespace ConquerServer_Basic
 
         static public void LoadShops()
         {
-            IniFile Shop = new IniFile(Application.StartupPath + "\\Misc\\Shop.ini");
+            // TODO - Load Shops from Database
+            IniFile Shop = new IniFile(shopFile);
             ushort ShopCount = Shop.ReadUInt16("Header", "Amount", 0);
             for (ushort i = 0; i < ShopCount; i++)
             {

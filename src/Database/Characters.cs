@@ -72,7 +72,10 @@ namespace ConquerServer_Basic
                 Client.AtkTimer.Interval = Math.Max(100, 2000 - (Client.Agility * 10));
                 Client.AtkTimer.Elapsed += new System.Timers.ElapsedEventHandler(Client.AtkTimer_Elapsed);
                 Client.AtkTimer.Start();
-                LoadProfs(Client); LoadInventory(Client); LoadEquips(Client); LoadSkills(Client);
+                LoadProfs(Client);
+                LoadInventory(Client);
+                LoadEquips(Client);
+                LoadSkills(Client);
             }
 
             return res;
@@ -211,33 +214,34 @@ namespace ConquerServer_Basic
 
         static public void LoadSkills(GameClient Hero)
         {
-            // TODO - Load Skills from Database instead of Flat File
-            IniFile rdr = new IniFile(Misc.DatabasePath + @"\Skills\" + Hero.Username + ".ini");
-            sbyte count = rdr.ReadSByte("Skill", "Count", 0);
-            for (sbyte i = 0; i < count; i++)
+            MySqlCommand cmd = new MySqlCommand(MySqlCommandType.SELECT);
+            cmd.Select("accountsskills").Where("accountEntityId", Hero.Identifier);
+            MySqlReader r = new MySqlReader(cmd);
+            while (r.Read())
             {
-                string[] Skill = (rdr.ReadString("Skill", "Skill[" + i.ToString() + "]", String.Empty)).Split(' ');
                 ISkill LoadedSkill = new SpellPacket(true);
-                LoadedSkill.ID = ushort.Parse(Skill[0]);
-                LoadedSkill.Level = ushort.Parse(Skill[1]);
-                LoadedSkill.Experience = uint.Parse(Skill[2]);
+                LoadedSkill.ID = r.ReadUInt16("skillId");
+                LoadedSkill.Level = r.ReadUInt16("skilLLevel");
+                LoadedSkill.Experience = r.ReadUInt32("skilLExp");
                 Hero.LearnSpell(LoadedSkill);
             }
         }
         static public void SaveSkills(GameClient Hero)
         {
-            // TODO - Save Skills in Database instead of Flat File
-            if (File.Exists(Misc.DatabasePath + @"\Skills\" + Hero.Username + ".ini"))
-                File.Delete(Misc.DatabasePath + @"\Skills\" + Hero.Username + ".ini");
-            IniFile wrtr = new IniFile(Misc.DatabasePath + @"\Skills\" + Hero.Username + ".ini");
+            MySqlCommand cmd = new MySqlCommand(MySqlCommandType.DELETE);
+            cmd.Delete("accountsskills", "accountEntityId", Hero.Identifier);
+            cmd.Execute();
 
-            sbyte i = 0;
             foreach (ISkill skill in Hero.Spells.Values)
             {
-                wrtr.Write("Skill", "Skill[" + i + "]", skill.ID + " " + skill.Level + " " + skill.Experience);
-                i++;
+                cmd = new MySqlCommand(MySqlCommandType.INSERT);
+                cmd.Insert("accountsskills");
+                cmd.Insert("accountEntityId", Hero.Identifier);
+                cmd.Insert("skillId", skill.ID);
+                cmd.Insert("skilLLevel", skill.Level);
+                cmd.Insert("skillExp", skill.Experience);
+                cmd.Execute();
             }
-            wrtr.Write("Skill", "Count", i.ToString());
         }
 
         static public void LoadEquips(GameClient Client)

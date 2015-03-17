@@ -51,11 +51,11 @@ namespace ConquerServer_Basic
             cmd.Insert("username", acc);
             cmd.Insert("email", email);
             cmd.Execute();
-            MySqlCommand cmd2 = new MySqlCommand(MySqlCommandType.INSERT);
-            cmd2.Insert("characters");
-            cmd2.Insert("account", acc);
-            cmd2.Insert("staff", staff);
-            cmd2.Execute();
+            cmd = new MySqlCommand(MySqlCommandType.INSERT);
+            cmd.Insert("characters");
+            cmd.Insert("account", acc);
+            cmd.Insert("staff", staff);
+            cmd.Execute();
         }
         static public List<string> GetAccList()
         {
