@@ -65,9 +65,6 @@ namespace ConquerServer_Basic
             InitItem();
         }
 
-        [Obsolete]
-        public PlusItemStats(uint ItemID, byte Plus, IniFile rdr) : this(ItemID, Plus) { }
-
         private void InitItem()
         {
             MySqlCommand cmd = new MySqlCommand(MySqlCommandType.SELECT);
@@ -85,7 +82,6 @@ namespace ConquerServer_Basic
             }
         }
 
-        private IniFile ini = null;
         private uint _itemID = 0;
         private uint _baseID = 0;
         private uint _plus = 0;

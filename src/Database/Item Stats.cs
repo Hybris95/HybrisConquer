@@ -52,11 +52,6 @@ namespace ConquerServer_Basic
             }
         }
 
-        [Obsolete]
-        public StanderdItemStats(uint ItemID, IniFile rdr) : this(ItemID) { }
-        [Obsolete]
-        public StanderdItemStats(uint ItemID, out IniFile rdr) : this(ItemID) { rdr = null; }
-
         static public ushort GetDura(uint uid)
         {
             ushort dura = 0;
