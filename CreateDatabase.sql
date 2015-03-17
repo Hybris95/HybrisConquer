@@ -4454,7 +4454,45 @@ INSERT INTO `wepexpreq` VALUES (20, 0);
 CREATE TABLE `accountsskills` (
   `accountEntityId` int(10) unsigned NOT NULL,
   `skillId` int(10) unsigned NOT NULL,
-  `skillLevel` int(11) NOT NULL,
-  `skillExp` int(11) NOT NULL,
+  `skillLevel` int(11) unsigned NOT NULL,
+  `skillExp` int(11) unsigned NOT NULL,
   PRIMARY KEY (`accountEntityId`,`skillId`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+
+--
+-- Structure de la table `plusitemstats`
+--
+
+CREATE TABLE `plusitemstats` (
+  `itemID` int(10) unsigned NOT NULL,
+  `Plus` int(10) unsigned NOT NULL,
+  `MinAttack` int(11) unsigned NOT NULL,
+  `MaxAttack` int(11) unsigned NOT NULL,
+  `MAttack` int(11) unsigned NOT NULL,
+  `PhysDefence` smallint(6) unsigned NOT NULL,
+  `Dodge` tinyint(4) unsigned NOT NULL,
+  `MDefence` smallint(6) unsigned NOT NULL,
+  `HP` smallint(6) unsigned NOT NULL,
+  PRIMARY KEY (`itemID`,`Plus`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+
+--
+-- Structure de la table `itemstats`
+--
+
+CREATE TABLE `itemstats` (
+  `itemID` int(10) unsigned NOT NULL,
+  `MinAttack` int(10) unsigned NOT NULL,
+  `MaxAttack` smallint(5) unsigned NOT NULL,
+  `PhysicalDefence` smallint(5) unsigned NOT NULL,
+  `MDefence` smallint(5) unsigned NOT NULL,
+  `Dodge` tinyint(3) unsigned NOT NULL,
+  `MAttack` int(10) unsigned NOT NULL,
+  `HP` smallint(5) unsigned NOT NULL,
+  `MP` smallint(5) unsigned NOT NULL,
+  `Frequency` int(10) unsigned NOT NULL,
+  `AttackRange` tinyint(3) unsigned NOT NULL,
+  `Durability` smallint(5) unsigned NOT NULL,
+  `Dexterity` smallint(5) unsigned NOT NULL,
+  PRIMARY KEY (`itemID`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;

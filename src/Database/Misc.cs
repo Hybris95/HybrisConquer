@@ -189,8 +189,7 @@ namespace ConquerServer_Basic
 
         static public void LoadItemStats(GameClient Client, IConquerItem Item)
         {
-            IniFile rdr;
-            StanderdItemStats standerd = new StanderdItemStats(Item.ID, out rdr);
+            StanderdItemStats standerd = new StanderdItemStats(Item.ID);
 
             Client.Entity.Defence += standerd.PhysicalDefence;
             Client.Entity.MDefence += standerd.MDefence;
@@ -217,7 +216,7 @@ namespace ConquerServer_Basic
 
             if (Item.Plus != 0)
             {
-                PlusItemStats plus = new PlusItemStats(Item.ID, Item.Plus, rdr);
+                PlusItemStats plus = new PlusItemStats(Item.ID, Item.Plus);
                 Client.BaseMinAttack += plus.MinAttack;
                 Client.BaseMaxAttack += plus.MaxAttack;
                 Client.BaseMagicAttack += plus.MAttack;
@@ -235,8 +234,7 @@ namespace ConquerServer_Basic
         }
         static public void UnloadItemStats(GameClient Client, IConquerItem Item)
         {
-            IniFile rdr;
-            StanderdItemStats standerd = new StanderdItemStats(Item.ID, out rdr);
+            StanderdItemStats standerd = new StanderdItemStats(Item.ID);
 
             Client.Entity.Defence -= standerd.PhysicalDefence;
             Client.Entity.MDefence -= standerd.MDefence;
@@ -263,7 +261,7 @@ namespace ConquerServer_Basic
 
             if (Item.Plus != 0)
             {
-                PlusItemStats plus = new PlusItemStats(Item.ID, Item.Plus, rdr);
+                PlusItemStats plus = new PlusItemStats(Item.ID, Item.Plus);
                 Client.BaseMinAttack -= plus.MinAttack;
                 Client.BaseMaxAttack -= plus.MaxAttack;
                 Client.BaseMagicAttack -= plus.MAttack;

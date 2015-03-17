@@ -2,43 +2,85 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using MySqlHandler;
 
 namespace ConquerServer_Basic
 {
-    public struct StanderdItemStats
+    public class StanderdItemStats
     {
-        private IniFile ini;
+        private static string tableName = "itemstats";
+
+        private uint ItemID = 0;
+        private uint _minAttack = 0;
+        private uint _maxAttack = 0;
+        private ushort _physicalDefence = 0;
+        private ushort _mDefence = 0;
+        private sbyte _dodge = 0;
+        private uint _mAttack = 0;
+        private ushort _hP = 0;
+        private ushort _mP = 0;
+        private uint _frequency = 0;
+        private sbyte _attackRange = 0;
+        private ushort _durability = 0;
+        private ushort _dexterity = 0;
+
         public StanderdItemStats(uint ItemID)
         {
-            ini = new IniFile(Misc.DatabasePath + "\\Items\\" + ItemID.ToString() + ".ini");
+            this.ItemID = ItemID;
+            InitItem();
         }
-        public StanderdItemStats(uint ItemID, IniFile rdr)
+
+        private void InitItem()
         {
-            ini = rdr;
-            ini.FileName = Misc.DatabasePath + "\\Items\\" + ItemID.ToString() + ".ini";
+            MySqlCommand cmd = new MySqlCommand(MySqlCommandType.SELECT);
+            cmd.Select(tableName).Where("itemID", ItemID);
+            MySqlReader r = new MySqlReader(cmd);
+            while(r.Read())
+            {
+                _minAttack = r.ReadUInt32("MinAttack");
+                _maxAttack = r.ReadUInt32("MaxAttack");
+                _physicalDefence = r.ReadUInt16("PhysicalDefence");
+                _mDefence = r.ReadUInt16("MDefence");
+                _dodge = r.ReadSByte("Dodge");
+                _mAttack = r.ReadUInt32("MAttack");
+                _hP = r.ReadUInt16("HP");
+                _mP = r.ReadUInt16("MP");
+                _frequency = r.ReadUInt32("Frequency");
+                _attackRange = r.ReadSByte("AttackRange");
+                _durability = r.ReadUInt16("Durability");
+                _dexterity = r.ReadUInt16("Dexterity");
+            }
         }
-        public StanderdItemStats(uint ItemID, out IniFile rdr)
-        {
-            ini = new IniFile(Misc.DatabasePath + "\\Items\\" + ItemID.ToString() + ".ini");
-            rdr = ini;
-        }
+
+        [Obsolete]
+        public StanderdItemStats(uint ItemID, IniFile rdr) : this(ItemID) { }
+        [Obsolete]
+        public StanderdItemStats(uint ItemID, out IniFile rdr) : this(ItemID) { rdr = null; }
+
         static public ushort GetDura(uint uid)
         {
-            IniFile IF = new IniFile(Misc.DatabasePath + "\\Items\\" + uid.ToString() + ".ini");
-            ushort dura = IF.ReadUInt16("ItemInformation", "Durability", 0);
+            ushort dura = 0;
+            MySqlCommand cmd = new MySqlCommand(MySqlCommandType.SELECT);
+            cmd.Select(tableName).Where("itemID", uid);
+            MySqlReader r = new MySqlReader(cmd);
+            if (r.Read())
+            {
+                dura = r.ReadUInt16("Durability");
+            }
             return dura;
         }
-        public uint MinAttack { get { return ini.ReadUInt32("ItemInformation", "MinPhysAtk", 0); } }
-        public uint MaxAttack { get { return ini.ReadUInt32("ItemInformation", "MaxPhysAtk", 0); } }
-        public ushort PhysicalDefence { get { return ini.ReadUInt16("ItemInformation", "PhysDefence", 0); } }
-        public ushort MDefence { get { return ini.ReadUInt16("ItemInformation", "MDefence", 0); } }
-        public sbyte Dodge { get { return ini.ReadSByte("ItemInformation", "Dodge", 0); } }
-        public uint MAttack { get { return ini.ReadUInt32("ItemInformation", "MAttack", 0); } }
-        public ushort HP { get { return ini.ReadUInt16("ItemInformation", "PotAddHP", 0); } }
-        public ushort MP { get { return ini.ReadUInt16("ItemInformation", "PotAddMP", 0); } }
-        public uint Frequency { get { return ini.ReadUInt32("ItemInformation", "Frequency", 0); } }
-        public sbyte AttackRange { get { return ini.ReadSByte("ItemInformation", "Range", 0); } }
-        public ushort Durability { get { return ini.ReadUInt16("ItemInformation", "Durability", 0); } }
-        public ushort Dexerity { get { return ini.ReadUInt16("ItemInformation", "Dexerity", 0); } }
+
+        public uint MinAttack { get { return _minAttack; } }
+        public uint MaxAttack { get { return _maxAttack; } }
+        public ushort PhysicalDefence { get { return _physicalDefence; } }
+        public ushort MDefence { get { return _mDefence; } }
+        public sbyte Dodge { get { return _dodge; } }
+        public uint MAttack { get { return _mAttack; } }
+        public ushort HP { get { return _hP; } }
+        public ushort MP { get { return _mP; } }
+        public uint Frequency { get { return _frequency; } }
+        public sbyte AttackRange { get { return _attackRange; } }
+        public ushort Durability { get { return _durability; } }
+        public ushort Dexterity { get { return _dexterity; } }
     }
 }

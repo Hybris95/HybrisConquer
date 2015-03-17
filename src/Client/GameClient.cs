@@ -480,8 +480,7 @@ namespace ConquerServer_Basic
         }
         public void LoadItemStats(IConquerItem Item)
         {
-            IniFile rdr;
-            StanderdItemStats standerd = new StanderdItemStats(Item.ID, out rdr);
+            StanderdItemStats standerd = new StanderdItemStats(Item.ID);
 
             this.BaseMinAttack += standerd.MinAttack;
             this.BaseMaxAttack += standerd.MaxAttack;
@@ -501,7 +500,7 @@ namespace ConquerServer_Basic
 
             if (Item.Plus != 0)
             {
-                PlusItemStats plus = new PlusItemStats(Item.ID, Item.Plus, rdr);
+                PlusItemStats plus = new PlusItemStats(Item.ID, Item.Plus);
                 this.BaseMinAttack += plus.MinAttack;
                 this.BaseMaxAttack += plus.MaxAttack;
                 this.BaseMagicAttack += plus.MAttack;

@@ -2,12 +2,14 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using MySqlHandler;
 
 namespace ConquerServer_Basic
 {
-    public struct PlusItemStats
+    public class PlusItemStats
     {
-        static public string GetBaseID(uint ID)
+        private static string tableName = "plusitemstats";
+        private static uint GetBaseID(uint ID)
         {
             switch ((byte)(ID / 10000))
             {
@@ -50,27 +52,60 @@ namespace ConquerServer_Basic
                         break;
                     }
             }
-            return ID.ToString();
+            return ID;
         }
 
         public const string Section = "ItemInformation";
-        private IniFile ini;
+
         public PlusItemStats(uint ItemID, byte Plus)
         {
-            ini = new IniFile(Misc.DatabasePath + "\\PItems\\" + GetBaseID(ItemID) + "[" + Plus.ToString() + "].ini");
+            _itemID = ItemID;
+            _baseID = GetBaseID(_itemID);
+            _plus = Plus;
+            InitItem();
         }
-        public PlusItemStats(uint ItemID, byte Plus, IniFile rdr)
+
+        [Obsolete]
+        public PlusItemStats(uint ItemID, byte Plus, IniFile rdr) : this(ItemID, Plus) { }
+
+        private void InitItem()
         {
-            ini = rdr; 
-            ini.FileName = Misc.DatabasePath + "\\PItems\\" + GetBaseID(ItemID) + "[" + Plus.ToString() + "].ini";
+            MySqlCommand cmd = new MySqlCommand(MySqlCommandType.SELECT);
+            cmd.Select(tableName).Where("itemID", _itemID).And("Plus", _plus);
+            MySqlReader r = new MySqlReader(cmd);
+            while(r.Read())
+            {
+                _minAttack = r.ReadUInt32("MinAttack");
+                _maxAttack = r.ReadUInt32("MaxAttack");
+                _mAttack = r.ReadUInt32("MAttack");
+                _physicalDefence = r.ReadUInt16("PhysDefence");
+                _dodge = r.ReadSByte("Dodge");
+                _plusMDefence = r.ReadUInt16("MDefence");
+                _hP = r.ReadUInt16("HP");
+            }
         }
-        public uint MinAttack { get { return ini.ReadUInt32("ItemInformation", "MinAttack", 0); } }
-        public uint MaxAttack { get { return ini.ReadUInt32("ItemInformation", "MaxAttack", 0); } }
-        public uint MAttack { get { return ini.ReadUInt32("ItemInformation", "MAttack", 0); } }
-        public ushort PhysicalDefence { get { return ini.ReadUInt16("ItemInformation", "PhysDefence", 0); } }
-        public sbyte Dodge { get { return ini.ReadSByte("ItemInformation", "Dodge", 0); } }
-        public ushort PlusMDefence { get { return ini.ReadUInt16("ItemInformation", "MDefence", 0); } }
-        public ushort HP { get { return ini.ReadUInt16("ItemInformation", "HP", 0); } }
+
+        private IniFile ini = null;
+        private uint _itemID = 0;
+        private uint _baseID = 0;
+        private uint _plus = 0;
+
+        private uint _minAttack = 0;
+        private uint _maxAttack = 0;
+        private uint _mAttack = 0;
+        private ushort _physicalDefence = 0;
+        private sbyte _dodge = 0;
+        private ushort _plusMDefence = 0;
+        private ushort _hP = 0;
+
+        public uint MinAttack { get { return _minAttack; } }
+        public uint MaxAttack { get { return _maxAttack; } }
+        public uint MAttack { get { return _mAttack; } }
+        public ushort PhysicalDefence { get { return _physicalDefence; } }
+        public sbyte Dodge { get { return _dodge; } }
+        public ushort PlusMDefence { get { return _plusMDefence; } }
+        public ushort HP { get { return _hP; } }
+
         public void LoadAllItem()
         {
             
