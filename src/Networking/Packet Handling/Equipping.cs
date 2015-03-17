@@ -42,7 +42,8 @@ namespace ConquerServer_Basic.Networking.Packet_Handling
                     return true;
                 }
                 default:
-                    return false;
+                    // TODO - Say what item can't be used (if not an equipement)
+                    break;
             }
             return false;
         }

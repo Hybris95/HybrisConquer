@@ -1,9 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 11.00
 # Visual C# Express 2010
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConquerServer", "ConquerServer.csproj", "{5849782D-8578-4A0F-AB92-9C70E115D85B}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConquerNetwork", "..\ConquerNetwork\ConquerNetwork.csproj", "{DA973CF2-B69C-4B1D-B5D1-D4EE906AE572}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConquerNetwork", "ConquerNetwork.csproj", "{DA973CF2-B69C-4B1D-B5D1-D4EE906AE572}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -11,10 +9,6 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{5849782D-8578-4A0F-AB92-9C70E115D85B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{5849782D-8578-4A0F-AB92-9C70E115D85B}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{5849782D-8578-4A0F-AB92-9C70E115D85B}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{5849782D-8578-4A0F-AB92-9C70E115D85B}.Release|Any CPU.Build.0 = Release|Any CPU
 		{DA973CF2-B69C-4B1D-B5D1-D4EE906AE572}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{DA973CF2-B69C-4B1D-B5D1-D4EE906AE572}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{DA973CF2-B69C-4B1D-B5D1-D4EE906AE572}.Release|Any CPU.ActiveCfg = Release|Any CPU
