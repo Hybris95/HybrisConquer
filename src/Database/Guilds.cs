@@ -12,62 +12,69 @@ namespace ConquerServer_Basic.Database
     {
         static public void LoadGuilds()
         {
-            // TODO - Create the directory if not exist
             // TODO - Pass this on the database
-            foreach (string file in Directory.GetFiles(Misc.DatabasePath + "\\Guilds\\"))
+            string guildsDirectory = Misc.DatabasePath + @"\Guilds\";
+            if (Directory.Exists(guildsDirectory))
             {
-                IniFile read = new IniFile(file);
-                Guild guild = new Guild();
-                guild.ID = read.ReadUInt16("Guild", "ID", 0);
-                guild.Name = read.ReadString("Guild", "Name", "");
-                guild.Fund = read.ReadUInt32("Guild", "Fund", 0);
-                guild.GwWins = read.ReadUInt32("Guild", "GwWins", 0);
-                guild.HoldingPole = bool.Parse(read.ReadString("Guild", "HoldingPole", "False"));
-                guild.Leader = read.ReadString("Guild", "Leader", "Error");
-                guild.MemberCount = read.ReadUInt32("Guild", "MemberCount", 0);
-                guild.Bulletin = read.ReadString("Guild", "Bulletin", "Welcome to " + guild.Name);
-
-                ArrayList Members = new ArrayList();
-                try
+                foreach (string file in Directory.GetFiles(guildsDirectory))
                 {
-                    string[] memlist = read.ReadString("Guild", "Members", "").Split(':');
-                    foreach (string member in memlist)
-                        Members.Add(uint.Parse(member));
-                }
-                catch { }
-                guild.Members = Members;
+                    IniFile read = new IniFile(file);
+                    Guild guild = new Guild();
+                    guild.ID = read.ReadUInt16("Guild", "ID", 0);
+                    guild.Name = read.ReadString("Guild", "Name", "");
+                    guild.Fund = read.ReadUInt32("Guild", "Fund", 0);
+                    guild.GwWins = read.ReadUInt32("Guild", "GwWins", 0);
+                    guild.HoldingPole = bool.Parse(read.ReadString("Guild", "HoldingPole", "False"));
+                    guild.Leader = read.ReadString("Guild", "Leader", "Error");
+                    guild.MemberCount = read.ReadUInt32("Guild", "MemberCount", 0);
+                    guild.Bulletin = read.ReadString("Guild", "Bulletin", "Welcome to " + guild.Name);
 
-                ArrayList Deps = new ArrayList();
-                try
-                {
-                    string[] deplist = read.ReadString("Guild", "DeputyLeaders", "").Split(':');
-                    foreach (string dep in deplist)
-                        Deps.Add(uint.Parse(dep));
-                }
-                catch { }
-                guild.DeputyLeaders = Deps;
+                    ArrayList Members = new ArrayList();
+                    try
+                    {
+                        string[] memlist = read.ReadString("Guild", "Members", "").Split(':');
+                        foreach (string member in memlist)
+                            Members.Add(uint.Parse(member));
+                    }
+                    catch { }
+                    guild.Members = Members;
 
-                ArrayList allies = new ArrayList();
-                try
-                {
-                    string[] allylist = read.ReadString("Guild", "Allies", "").Split(':');
-                    foreach (string ally in allylist)
-                        allies.Add(ushort.Parse(ally));
-                }
-                catch { }
-                guild.Allies = allies;
+                    ArrayList Deps = new ArrayList();
+                    try
+                    {
+                        string[] deplist = read.ReadString("Guild", "DeputyLeaders", "").Split(':');
+                        foreach (string dep in deplist)
+                            Deps.Add(uint.Parse(dep));
+                    }
+                    catch { }
+                    guild.DeputyLeaders = Deps;
 
-                ArrayList enemies = new ArrayList();
-                try
-                {
-                    string[] enemylist = read.ReadString("Guild", "Enemies", "").Split(':');
-                    foreach (string enemy in enemylist)
-                        enemies.Add(ushort.Parse(enemy));
-                }
-                catch { }
-                guild.Enemies = enemies;
+                    ArrayList allies = new ArrayList();
+                    try
+                    {
+                        string[] allylist = read.ReadString("Guild", "Allies", "").Split(':');
+                        foreach (string ally in allylist)
+                            allies.Add(ushort.Parse(ally));
+                    }
+                    catch { }
+                    guild.Allies = allies;
 
-                Kernel.Guilds.Add(guild.ID, guild);
+                    ArrayList enemies = new ArrayList();
+                    try
+                    {
+                        string[] enemylist = read.ReadString("Guild", "Enemies", "").Split(':');
+                        foreach (string enemy in enemylist)
+                            enemies.Add(ushort.Parse(enemy));
+                    }
+                    catch { }
+                    guild.Enemies = enemies;
+
+                    Kernel.Guilds.Add(guild.ID, guild);
+                }
+            }
+            else
+            {
+                Directory.CreateDirectory(guildsDirectory);
             }
             Console.WriteLine("Guilds Loaded [{0}]", Kernel.Guilds.Count);
         }

@@ -53,10 +53,6 @@
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="DMapLoader, Version=1.0.0.0, Culture=neutral, processorArchitecture=x86">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>.\DMapLoader.dll</HintPath>
-    </Reference>
     <Reference Include="ManagedOpenSsl">
       <HintPath>.\ManagedOpenSsl.dll</HintPath>
     </Reference>
@@ -196,8 +192,16 @@
       <Project>{DA973CF2-B69C-4B1D-B5D1-D4EE906AE572}</Project>
       <Name>ConquerNetwork</Name>
     </ProjectReference>
+    <ProjectReference Include="..\DMapLoader\DMapLoader.csproj">
+      <Project>{3D525973-7E05-4F95-A620-622A937B4A6D}</Project>
+      <Name>DMapLoader</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <PostBuildEvent>
+    </PostBuildEvent>
+  </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">

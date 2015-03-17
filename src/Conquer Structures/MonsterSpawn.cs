@@ -102,27 +102,35 @@ namespace ConquerServer_Basic.Conquer_Structures
 
         static public void Load()
         {
-            // TODO - Create the file if not exists
+            string filePath = Application.StartupPath + @"\MobSpawns.txt";
             // TODO - Pass this in the database
-            string[] FSpawns = File.ReadAllLines(Application.StartupPath+@"//MobSpawns.txt");
-            ushort mobspawn = 1;
-            foreach (string Spawn in FSpawns)
+            if (File.Exists(filePath))
             {
-                if (Spawn[0] == '*') return;
-                string[] SpawnInfo = Spawn.Split(' ');
-                MonsterSpawn spawn = new MonsterSpawn();
-                spawn.SpawnID = mobspawn;
-                spawn.MobID = uint.Parse(SpawnInfo[0]);
-                spawn.SpawnAmount = uint.Parse(SpawnInfo[1]);
-                spawn.MapID = ushort.Parse(SpawnInfo[2]);
-                spawn.X = ushort.Parse(SpawnInfo[3]);
-                spawn.Y = ushort.Parse(SpawnInfo[4]);
-                spawn.Xc = ushort.Parse(SpawnInfo[5]);
-                spawn.Yc =ushort.Parse(SpawnInfo[6]);
-                Kernel.MobSpawns.Add(spawn.SpawnID, spawn);
-                mobspawn++;
+                string[] FSpawns = File.ReadAllLines(filePath);
+                ushort mobspawn = 1;
+                foreach (string Spawn in FSpawns)
+                {
+                    if (Spawn[0] == '*') return;
+                    string[] SpawnInfo = Spawn.Split(' ');
+                    MonsterSpawn spawn = new MonsterSpawn();
+                    spawn.SpawnID = mobspawn;
+                    spawn.MobID = uint.Parse(SpawnInfo[0]);
+                    spawn.SpawnAmount = uint.Parse(SpawnInfo[1]);
+                    spawn.MapID = ushort.Parse(SpawnInfo[2]);
+                    spawn.X = ushort.Parse(SpawnInfo[3]);
+                    spawn.Y = ushort.Parse(SpawnInfo[4]);
+                    spawn.Xc = ushort.Parse(SpawnInfo[5]);
+                    spawn.Yc = ushort.Parse(SpawnInfo[6]);
+                    Kernel.MobSpawns.Add(spawn.SpawnID, spawn);
+                    mobspawn++;
+                }
+                Console.WriteLine("Spawns Loaded [{0}]", mobspawn - 1);
             }
-            Console.WriteLine("Spawns Loaded [{0}]", mobspawn--);
+            else
+            {
+                File.AppendAllText(filePath, "*");
+                Console.WriteLine("Default Spawns File Created");
+            }
         }
         static public void Unload()
         {

@@ -200,7 +200,7 @@ namespace ConquerServer_Basic
             Misc.LoadSettings();
 
             #region Dmap Handler
-            DmapHandler.ConquerPath = Application.StartupPath + @"\map\";
+            DmapHandler.ConquerPath = Application.StartupPath;
             DmapHandler.Load();
             #endregion
 
