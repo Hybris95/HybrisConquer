@@ -61,7 +61,7 @@ namespace ConquerServer_Basic.Attack_Handling
                                 }
                                 else
                                 {
-                                    mob.Hitpoints -= (Int32)Damage;
+                                    mob.Hitpoints -= Damage;
                                     Hero.GainExp(Damage / 10, true);
                                     Hero.GainProfExp(Damage, true);
                                 }
@@ -137,7 +137,7 @@ namespace ConquerServer_Basic.Attack_Handling
                                 }
                                 else
                                 {
-                                    hero.Attacked.Hitpoints -= (Int32)Damage;
+                                    hero.Attacked.Hitpoints -= Damage;
                                     Sync.HP(hero);
                                 }
                                 break;

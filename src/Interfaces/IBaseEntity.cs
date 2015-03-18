@@ -14,14 +14,14 @@ namespace ConquerServer_Basic
     public interface IBaseEntity
     {
         bool Dead { get; set; }
-        ushort Defence { get; set; }
+        uint Defence { get; set; }
         sbyte Dodge { get; set; }
         EntityFlag EntityFlag { get; set; }
-        int Hitpoints { get; set; }
+        uint Hitpoints { get; set; }
         uint MagicAttack { get; set; }
         ushort MapID { get; set; }
         uint MaxAttack { get; set; }
-        int MaxHitpoints { get; set; }
+        uint MaxHitpoints { get; set; }
         ushort MDefence { get; set; }
         uint MinAttack { get; set; }
         object Owner { get; set; }

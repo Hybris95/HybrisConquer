@@ -282,12 +282,12 @@ namespace ConquerServer_Basic
         public UInt32 BaseMinAttack;
         public UInt32 BaseMaxAttack;
         public UInt32 BaseMagicAttack;
-        public UInt16 ItemHP;
-        public UInt16 ItemMP;
+        public UInt32 ItemHP;
+        public UInt32 ItemMP;
         // -----
 
         public Byte BlessPercent;
-        public SByte AttackRange;
+        public UInt16 AttackRange;
         public UInt32 AttackSpeed;
         public Int16[] Gems;
 
@@ -386,12 +386,12 @@ namespace ConquerServer_Basic
         {
             switch (this.Job)
             {
-                case 11: this.Entity.MaxHitpoints = (int)(this.StatHP * 1.05F); break;
-                case 12: this.Entity.MaxHitpoints = (int)(this.StatHP * 1.08F); break;
-                case 13: this.Entity.MaxHitpoints = (int)(this.StatHP * 1.10F); break;
-                case 14: this.Entity.MaxHitpoints = (int)(this.StatHP * 1.12F); break;
-                case 15: this.Entity.MaxHitpoints = (int)(this.StatHP * 1.15F); break;
-                default: this.Entity.MaxHitpoints = (int)this.StatHP; break;
+                case 11: this.Entity.MaxHitpoints = (uint)(this.StatHP * 1.05F); break;
+                case 12: this.Entity.MaxHitpoints = (uint)(this.StatHP * 1.08F); break;
+                case 13: this.Entity.MaxHitpoints = (uint)(this.StatHP * 1.10F); break;
+                case 14: this.Entity.MaxHitpoints = (uint)(this.StatHP * 1.12F); break;
+                case 15: this.Entity.MaxHitpoints = (uint)(this.StatHP * 1.15F); break;
+                default: this.Entity.MaxHitpoints = (uint)this.StatHP; break;
             }
             this.Entity.MaxHitpoints += this.ItemHP;
             this.Entity.Hitpoints = Math.Min(this.Entity.Hitpoints, this.Entity.MaxHitpoints);
@@ -421,7 +421,7 @@ namespace ConquerServer_Basic
                     break;
             }
             HP += ItemHP;
-            Hero.Entity.MaxHitpoints = (int)HP;
+            Hero.Entity.MaxHitpoints = (uint)HP;
             Sync.MaxHP(this);
         }
         public void Health(ushort Amount)
@@ -480,22 +480,26 @@ namespace ConquerServer_Basic
         }
         public void LoadItemStats(IConquerItem Item)
         {
-            StanderdItemStats standerd = new StanderdItemStats(Item.ID);
+            StanderdItemStats standerd = null;
+            if (!Kernel.ItemsStats.TryGetValue(Item.ID, out standerd))
+            {
+                return;
+            }
 
-            this.BaseMinAttack += standerd.MinAttack;
-            this.BaseMaxAttack += standerd.MaxAttack;
+            this.BaseMinAttack += standerd.MinPhysAtk;
+            this.BaseMaxAttack += standerd.MaxPhysAtk;
 
-            this.Entity.Defence += standerd.PhysicalDefence;
+            this.Entity.Defence += standerd.PhysDefence;
             this.Entity.MDefence += standerd.MDefence;
             this.Entity.Dodge += standerd.Dodge;
 
             this.BaseMagicAttack += standerd.MAttack;
-            this.ItemHP += standerd.HP;
-            this.ItemMP += standerd.MP;
+            this.ItemHP += standerd.PotAddHP;
+            this.ItemMP += standerd.PotAddMP;
             if (Item.Position == ItemPosition.Right)
             {
                 this.AttackSpeed = standerd.Frequency;
-                this.AttackRange += standerd.AttackRange;
+                this.AttackRange += standerd.Range;
             }
 
             if (Item.Plus != 0)

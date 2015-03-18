@@ -189,29 +189,33 @@ namespace ConquerServer_Basic
 
         static public void LoadItemStats(GameClient Client, IConquerItem Item)
         {
-            StanderdItemStats standerd = new StanderdItemStats(Item.ID);
+            StanderdItemStats standerd = null;
+            if (!Kernel.ItemsStats.TryGetValue(Item.ID, out standerd))
+            {
+                return;
+            }
 
-            Client.Entity.Defence += standerd.PhysicalDefence;
+            Client.Entity.Defence += standerd.PhysDefence;
             Client.Entity.MDefence += standerd.MDefence;
             Client.Entity.Dodge += standerd.Dodge;
 
             Client.BaseMagicAttack += standerd.MAttack;
-            Client.ItemHP += standerd.HP;
-            Client.ItemMP += standerd.MP;
+            Client.ItemHP += standerd.PotAddHP;
+            Client.ItemMP += standerd.PotAddMP;
 
             if (Item.Position == ItemPosition.Right)
             {
-                Client.AttackRange += standerd.AttackRange;
+                Client.AttackRange += standerd.Range;
             }
             if (Item.Position == ItemPosition.Left)
             {
-                Client.BaseMinAttack += (uint)(standerd.MinAttack * 0.5F);
-                Client.BaseMaxAttack += (uint)(standerd.MaxAttack * 0.5F);
+                Client.BaseMinAttack += (uint)(standerd.MinPhysAtk * 0.5F);
+                Client.BaseMaxAttack += (uint)(standerd.MaxPhysAtk * 0.5F);
             }
             else
             {
-                Client.BaseMinAttack += standerd.MinAttack;
-                Client.BaseMaxAttack += standerd.MaxAttack;
+                Client.BaseMinAttack += standerd.MinPhysAtk;
+                Client.BaseMaxAttack += standerd.MaxPhysAtk;
             }
 
             if (Item.Plus != 0)
@@ -234,15 +238,19 @@ namespace ConquerServer_Basic
         }
         static public void UnloadItemStats(GameClient Client, IConquerItem Item)
         {
-            StanderdItemStats standerd = new StanderdItemStats(Item.ID);
+            StanderdItemStats standerd = null;
+            if (!Kernel.ItemsStats.TryGetValue(Item.ID, out standerd))
+            {
+                return;
+            }
 
-            Client.Entity.Defence -= standerd.PhysicalDefence;
+            Client.Entity.Defence -= standerd.PhysDefence;
             Client.Entity.MDefence -= standerd.MDefence;
             Client.Entity.Dodge -= standerd.Dodge;
 
             Client.BaseMagicAttack -= standerd.MAttack;
-            Client.ItemHP -= standerd.HP;
-            Client.ItemMP -= standerd.MP;
+            Client.ItemHP -= standerd.PotAddHP;
+            Client.ItemMP -= standerd.PotAddMP;
 
             if (Item.Position == ItemPosition.Right)
             {
@@ -250,13 +258,13 @@ namespace ConquerServer_Basic
             }
             if (Item.Position == ItemPosition.Left)
             {
-                Client.BaseMinAttack -= (uint)(standerd.MinAttack * 0.5F);
-                Client.BaseMaxAttack -= (uint)(standerd.MaxAttack * 0.5F);
+                Client.BaseMinAttack -= (uint)(standerd.MinPhysAtk * 0.5F);
+                Client.BaseMaxAttack -= (uint)(standerd.MaxPhysAtk * 0.5F);
             }
             else
             {
-                Client.BaseMinAttack -= standerd.MinAttack;
-                Client.BaseMaxAttack -= standerd.MaxAttack;
+                Client.BaseMinAttack -= standerd.MinPhysAtk;
+                Client.BaseMaxAttack -= standerd.MaxPhysAtk;
             }
 
             if (Item.Plus != 0)

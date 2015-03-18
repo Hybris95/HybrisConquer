@@ -226,6 +226,7 @@ namespace ConquerServer_Basic
                 try
                 {
                     #region Database Loads
+                    StanderdItemStats.Load();
                     Npc.Load();
                     Monster.Load();
                     MonsterSpawn.Load();
@@ -264,6 +265,13 @@ namespace ConquerServer_Basic
                 finally
                 {
                     #region Unload
+                    // Force disconnect for all clients (in order to save correctly their character)
+                    GameClient[] clients = Kernel.GamePool.Values.ToArray<GameClient>();
+                    foreach (GameClient client in clients)
+                    {
+                        client.LogOff();
+                    }
+
                     Kernel.CloseSocket(9958);
                     Kernel.CloseSocket(5816);
 
@@ -279,6 +287,7 @@ namespace ConquerServer_Basic
                     MonsterSpawn.Unload();
                     Monster.Unload();
                     Npc.Unload();
+                    StanderdItemStats.Unload();
                     #endregion
                 }
             }

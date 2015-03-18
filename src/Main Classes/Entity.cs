@@ -37,13 +37,13 @@ namespace ConquerServer_Basic
 
     public class Entity : IBaseEntity, IMapObject
     {
-        private ushort m_Defence;
+        private uint m_Defence;
         private sbyte m_Dodge;
         private EntityFlag m_EntityFlag;
         private uint m_MagicAttack;
         private ushort m_MapID;
         private uint m_MaxAttack;
-        private int m_MaxHitpoints;
+        private uint m_MaxHitpoints;
         private ushort m_MDefence;
         private uint m_MinAttack;
         private object m_Owner;
@@ -163,7 +163,7 @@ namespace ConquerServer_Basic
             }
         }
 
-        public ushort Defence
+        public uint Defence
         {
             get
             {
@@ -209,7 +209,7 @@ namespace ConquerServer_Basic
                 PacketBuilder.WriteUInt16(value, this.SpawnPacket, 20);
             }
         }
-        public int Hitpoints
+        public uint Hitpoints
         {
             get
             {
@@ -257,7 +257,7 @@ namespace ConquerServer_Basic
             }
         }
 
-        public int MaxHitpoints
+        public uint MaxHitpoints
         {
             get
             {

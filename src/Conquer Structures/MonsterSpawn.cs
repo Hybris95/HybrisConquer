@@ -67,8 +67,8 @@ namespace ConquerServer_Basic.Conquer_Structures
                     newMob.Defence = (ushort)ThisMob.Defence;
                     newMob.Dodge = (sbyte)ThisMob.Dodge;
                     newMob.Facing = (ConquerAngle)Kernel.Random.Next(0, 9);
-                    newMob.Hitpoints = (Int32)ThisMob.Life;
-                    newMob.MaxHitpoints = (Int32)ThisMob.Life;
+                    newMob.Hitpoints = ThisMob.Life;
+                    newMob.MaxHitpoints = ThisMob.Life;
                     newMob.Level = (byte)ThisMob.Level;
                     newMob.MagicAttack = ThisMob.AttackMin;
                     newMob.MaxAttack = ThisMob.AttackMax;

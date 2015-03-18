@@ -71,7 +71,8 @@ namespace ConquerServer_Basic
                                     IConquerItem item = new ItemDataPacket(true);
                                     item.UID = ItemDataPacket.NextItemUID;
                                     item.ID = uint.Parse(Cmd[1]);
-                                    item.Durability = item.MaxDurability = StanderdItemStats.GetDura(item.ID);
+                                    StanderdItemStats itemStats = null;
+                                    item.Durability = item.MaxDurability = Kernel.ItemsStats.TryGetValue(item.ID, out itemStats) ? itemStats.Durability : (ushort)0;
                                     if (Cmd.Length > 2)
                                     {
                                         item.Plus = byte.Parse(Cmd[2]);
@@ -158,7 +159,8 @@ namespace ConquerServer_Basic
                                     IConquerItem item = new ItemDataPacket(true);
                                     item.UID = ItemDataPacket.NextItemUID;
                                     item.ID = uint.Parse(Cmd[1]);
-                                    item.Durability = item.MaxDurability = StanderdItemStats.GetDura(item.ID);
+                                    StanderdItemStats itemStats = null;
+                                    item.Durability = item.MaxDurability = Kernel.ItemsStats.TryGetValue(item.ID, out itemStats) ? itemStats.Durability : (ushort)0;
                                     if (Cmd.Length > 2)
                                     {
                                         item.Plus = byte.Parse(Cmd[2]);
