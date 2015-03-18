@@ -11,39 +11,210 @@ namespace ConquerServer_Basic.Networking.Packet_Handling
     {
         static private bool UseItem(GameClient Client, IConquerItem Item)
         {
-            switch (Item.ID)
+            StanderdItemStats itemStats = null;
+            if (Kernel.ItemsStats.TryGetValue(Item.ID, out itemStats))
             {
-                case 725000:// Thunder (SkillBook)
+                if (itemStats.Action != 0)
                 {
-                    ISkill skillLearnt = null;
-                    if (!Client.Spells.TryGetValue(1000, out skillLearnt))
+                    switch (itemStats.Action)
                     {
-                        // TODO - Check if the character can learn it (Tao or Reborn from Tao ?)
-                        Client.LearnSpell(1000, 0);
+                        case 13021:// TwinCityGate
+                        {
+                            // TODO - Can the character get teleported ?
+                            Client.Teleport(1002, 430, 380);
+                            return true;
+                        }
+                        case 13022:// DesertCityGate
+                        {
+                            // TODO - Can the character get teleported ?
+                            // TODO - Find map/coordinates
+                            return true;
+                        }
+                        case 13023:// ApeCityGate
+                        {
+                            // TODO - Can the character get teleported ?
+                            Client.Teleport(1020, 566, 565);
+                            return true;
+                        }
+                        case 13024:// CastleGate
+                        {
+                            // TODO - Can the character get teleported ?
+                            Client.Teleport(1011, 193, 266);
+                            return true;
+                        }
+                        case 13025:// BirdIslandGate
+                        {
+                            // TODO - Can the character get teleported ?
+                            Client.Teleport(1015, 717, 577);
+                            return true;
+                        }
+                        default:
+                        {
+                            Console.WriteLine("ActionID : {0} is not managed!", itemStats.Action);
+                            break;
+                        }
+                    }
+                }
+                else if (itemStats.Description == "SkillBook")
+                {
+                    // TODO - Make a Dictionary (or a database table) to store those associations
+                    ushort skillID = 0;
+                    switch (itemStats.ItemID)
+                    {
+                        case 725000:// Thunder
+                        {
+                            skillID = 1000; break;
+                        }
+                        case 725001:// Fire
+                        {
+                            skillID = 1001; break;
+                        }
+                        case 725002:// Tornado
+                        {
+                            skillID = 1002; break;
+                        }
+                        case 725003:// Cure
+                        {
+                            skillID = 1005; break;
+                        }
+                        case 725004:// Lightning
+                        {
+                            skillID = 1010; break;
+                        }
+                        case 725005:// FastBlade
+                        {
+                            skillID = 1045; break;
+                        }
+                        case 725010:// ScentSword
+                        {
+                            skillID = 1046; break;
+                        }
+                        case 725011:// WideStrike
+                        {
+                            skillID = 1250; break;
+                        }
+                        case 725012:// SpeedGun
+                        {
+                            skillID = 1260; break;
+                        }
+                        case 725013:// Penetration
+                        {
+                            skillID = 1290; break;
+                        }
+                        case 725014:// Halt
+                        {
+                            skillID = 1300; break;
+                        }
+                        case 725015:// DivineHare
+                        {
+                            skillID = 1350; break;
+                        }
+                        case 725016:// NightDevil
+                        {
+                            skillID = 1360; break;
+                        }
+                        case 725018:// Dance2
+                        {
+                            skillID = 1380; break;
+                        }
+                        case 725019:// Dance3
+                        {
+                            skillID = 1385; break;
+                        }
+                        case 725020:// Dance4
+                        {
+                            skillID = 1390; break;
+                        }
+                        case 725021:// Dance5
+                        {
+                            skillID = 1395; break;
+                        }
+                        case 725022:// Dance6
+                        {
+                            skillID = 1400; break;
+                        }
+                        case 725023:// Dance7
+                        {
+                            skillID = 1405; break;
+                        }
+                        case 725024:// Dance8
+                        {
+                            skillID = 1410; break;
+                        }
+                        case 725025:// FlyingMoon
+                        {
+                            skillID = 1320; break;
+                        }
+                        case 725026:// Snow
+                        {
+                            skillID = 5010; break;
+                        }
+                        case 725027:// StrandedMonster
+                        {
+                            skillID = 5020; break;
+                        }
+                        case 725028:// SpeedLightning
+                        {
+                            skillID = 5001; break;
+                        }
+                        case 725029:// Phoenix
+                        {
+                            skillID = 5030; break;
+                        }
+                        case 725030:// Boom
+                        {
+                            skillID = 5040; break;
+                        }
+                        case 725031:// Boreas
+                        {
+                            skillID = 5050; break;
+                        }
+                        case 725040:// Seizer
+                        {
+                            skillID = 7000; break;
+                        }
+                        case 725041:// Earthquake
+                        {
+                            skillID = 7010; break;
+                        }
+                        case 725042:// Rage
+                        {
+                            skillID = 7020; break;
+                        }
+                        case 725043:// Celestial
+                        {
+                            skillID = 7030; break;
+                        }
+                        case 725044:// Roamer
+                        {
+                            skillID = 7040; break;
+                        }
+                        default:
+                        {
+                            Console.WriteLine("Unmanaged SkillBook : {0}", itemStats.ItemID);
+                            break;
+                        }
+
+                    }
+                    ISkill skillLearnt = null;
+                    if (skillID != 0 && !Client.Spells.TryGetValue(skillID, out skillLearnt))
+                    {
+                        // TODO - Check if the character can learn it (especially for spells)
+                        Client.LearnSpell(skillID, 0);
                     }
                     return true;
                 }
-                case 725005:// FastBlade (SkillBook)
+                else
                 {
-                    ISkill skillLearnt = null;
-                    if (!Client.Spells.TryGetValue(1045, out skillLearnt))
+                    switch (Item.ID)
                     {
-                        Client.LearnSpell(1045, 0);
+                        default:
+                            {
+                                // TODO - Say what item can't be used (if not an equipement)
+                                break;
+                            }
                     }
-                    return true;
                 }
-                case 725010:// ScentSword (SkillBook)
-                {
-                    ISkill skillLearnt = null;
-                    if (!Client.Spells.TryGetValue(1046, out skillLearnt))
-                    {
-                        Client.LearnSpell(1046, 0);
-                    }
-                    return true;
-                }
-                default:
-                    // TODO - Say what item can't be used (if not an equipement)
-                    break;
             }
             return false;
         }
@@ -105,6 +276,12 @@ namespace ConquerServer_Basic.Networking.Packet_Handling
                                 Client.Entity.MainHand = EquipItem.ID;
                             }
                             break;
+                        case 8:// Boots
+                            if (EquipItem.ID > 0)
+                            {
+                                // TODO - Create the required Boots attribute in Client.Entity
+                            }
+                            goto default;
                         default:
                             Console.Error.WriteLine("TODO - " + EquipItem.ID + " tryed to be equipped on slot : " + EquipSlot);
                             break;

@@ -37,49 +37,64 @@ namespace ConquerServer_Basic.Attack_Handling
 
             Hero.Entity.Action = ConquerAction.None;
 
-            switch (Hero.Attacked.EntityFlag)
+            if (Hero.Mana < skill.Mana || Hero.Stamina < skill.Stamina)
             {
-                case EntityFlag.Player:
-                    {
-                        Hero.Attacking = true;
-
-                        switch (skill.Type)
+                return;
+            }
+            else
+            {
+                Hero.Mana -= skill.Mana;
+                Hero.Stamina -= skill.Stamina;
+                switch (Hero.Attacked.EntityFlag)
+                {
+                    case EntityFlag.Player:
                         {
-                            case SpellType.Cure:
-                                {
-                                    if (Hero.Mana < skill.Mana)
-                                        return;
-                                    Hero.Mana -= skill.Mana;
-                                    if (Hero.Attacked.Hitpoints != Hero.Attacked.MaxHitpoints)
+                            Hero.Attacking = true;
+
+                            switch (skill.Type)
+                            {
+                                case SpellType.Cure:
                                     {
-                                        Hero.Health((UInt16)skill.BaseDamage);
+                                        if (Hero.Attacked.Hitpoints != Hero.Attacked.MaxHitpoints)
+                                        {
+                                            Hero.Health((UInt16)skill.BaseDamage);
+                                        }
+                                        else { Hero.Send(new MessagePacket("Targets health is full", 0xFFFFFF, 2005)); }
+                                        Sync.HP(Hero.Attacked.GetClient(Hero.Attacked));
+
+                                        Damage = (uint)skill.BaseDamage;
+                                        _Targets.Add(Hero.Attacked, Damage);
+
+                                        break;
                                     }
-                                    else {Hero.Send(new MessagePacket("Targets health is full", 0xFFFFFF, 2005)); }
-                                    Sync.HP(Hero.Attacked.GetClient(Hero.Attacked));
+                                case SpellType.Revive:
+                                    {
+                                        PacketProcessor.Revive(Hero.Attacked.GetClient(Hero.Attacked), true);
 
-                                    Damage = (uint)skill.BaseDamage;
-                                    _Targets.Add(Hero.Attacked, Damage);
+                                        _Targets.Add(Hero.Attacked, 0);
 
+                                        break;
+                                    }
+                                case SpellType.Disguise:
+                                    {
+                                        // TODO - Transform the Hero with the corresponding model
+                                        Console.WriteLine("{0}({1}) Type = {2}", skill.Name, skill.ID, skill.Type);
+                                        _Targets.Add(Hero.Attacked, 0);
+                                        break;
+                                    }
+                                case SpellType.Line:
+                                    {
+                                        // TODO - Code the line targets depending on the skill id/level
+                                        Console.WriteLine("{0}({1}) Type = {2}", skill.Name, skill.ID, skill.Type);
+                                        break;
+                                    }
+                                default:
+                                    Console.WriteLine("{0}({1}) Type = {2}", skill.Name, skill.ID, skill.Type);
                                     break;
-                                }
-                            case SpellType.Revive:
-                                {
-                                    if (Hero.Mana < skill.Mana)
-                                        return;
-                                    Hero.Mana -= skill.Mana;
-                                    PacketProcessor.Revive(Hero.Attacked.GetClient(Hero.Attacked), true);
-
-                                    _Targets.Add(Hero.Attacked, 0);
-
-                                    break;
-                                }
-                            default:
-                                Console.WriteLine("{0}({1}) Type = {2}", skill.Name, skill.ID, skill.Type);
-                                break;
+                            }
+                            break;
                         }
-
-                        break;
-                    }
+                }
             }
         }
 
