@@ -4471,6 +4471,22 @@ CREATE TABLE `accountsprofs` (
   PRIMARY KEY (`accountEntityId`,`skillId`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
+-- 
+-- Table structure for table `accountsinventory`
+-- 
+
+CREATE TABLE `accountsinventory` (
+  `accountEntityId` int(10) unsigned NOT NULL,
+  `itemID` int(10) unsigned NOT NULL,
+  `itemPlus` tinyint(4) NOT NULL,
+  `itemBless` tinyint(4) NOT NULL,
+  `itemEnchant` tinyint(4) NOT NULL,
+  `itemSocketOne` tinyint(4) NOT NULL,
+  `itemSocketTwo` tinyint(4) NOT NULL,
+  `itemDurability` smallint(6) unsigned NOT NULL,
+  `itemMaxDurability` smallint(6) unsigned NOT NULL
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+
 --
 -- Structure de la table `plusitemstats`
 --

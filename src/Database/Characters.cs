@@ -133,52 +133,45 @@ namespace ConquerServer_Basic
         
         static public void LoadInventory(GameClient Hero)
         {
-            // TODO - Load Inventory from database instead of Flat File
-            IniFile rdr = new IniFile(Misc.DatabasePath + @"\Inventory\" + Hero.Username + ".ini");
-            sbyte count = rdr.ReadSByte("Inventory", "Count", 0);
-            for (sbyte i = 0; i < count; i++)
+            MySqlCommand cmd = new MySqlCommand(MySqlCommandType.SELECT);
+            cmd.Select("accountsinventory").Where("accountEntityId", Hero.Identifier);
+            MySqlReader r = new MySqlReader(cmd);
+            while (r.Read())
             {
-                string[] Item = (rdr.ReadString("Inventory", "Item[" + i.ToString() + "]", String.Empty)).Split(' ');
                 ItemDataPacket LoadedItem = new ItemDataPacket(true);
-
-                LoadedItem.ID = uint.Parse(Item[0]);
-                LoadedItem.Plus = byte.Parse(Item[1]);
-                LoadedItem.Bless = byte.Parse(Item[2]);
-                LoadedItem.Enchant = byte.Parse(Item[3]);
-                LoadedItem.SocketOne = byte.Parse(Item[4]);
-                LoadedItem.SocketTwo = byte.Parse(Item[5]);
-                LoadedItem.Durability = ushort.Parse(Item[6]);
-                LoadedItem.MaxDurability = ushort.Parse(Item[7]);
+                LoadedItem.ID = r.ReadUInt32("itemID");
+                LoadedItem.Plus = r.ReadByte("itemPlus");
+                LoadedItem.Bless = r.ReadByte("itemBless");
+                LoadedItem.Enchant = r.ReadByte("itemEnchant");
+                LoadedItem.SocketOne = r.ReadByte("itemSocketOne");
+                LoadedItem.SocketTwo = r.ReadByte("itemSocketTwo");
+                LoadedItem.Durability = r.ReadUInt16("itemDurability");
+                LoadedItem.MaxDurability = r.ReadUInt16("itemMaxDurability");
                 LoadedItem.UID = ItemDataPacket.NextItemUID;
                 Hero.AddInventory(LoadedItem);
             }
         }
         static public void SaveInventory(GameClient Hero)
         {
-            // TODO - Save the inventory in database instead of flat file
-            if (File.Exists(Misc.DatabasePath + @"\Inventory\" + Hero.Username + ".ini"))
-                File.Delete(Misc.DatabasePath + @"\Inventory\" + Hero.Username + ".ini");
-            IniFile wrtr = new IniFile(Misc.DatabasePath + @"\Inventory\" + Hero.Username + ".ini");
-            // I use a foreach loop because the Inventory
-            // variables length can change at any time technically
-            // seeing as it's in sync with the dictionary, but not
-            // neccisarly with the function calling it
-            // this is rare -- but I've had it happen.
-            sbyte i = 0;
-            foreach (IConquerItem Item in Hero.Inventory)
+            MySqlCommand cmd = new MySqlCommand(MySqlCommandType.DELETE);
+            cmd.Delete("accountsinventory", "accountEntityId", Hero.Identifier);
+            cmd.Execute();
+
+            foreach (IConquerItem item in Hero.Inventory)
             {
-                string Save = Item.ID
-                    + " " + Item.Plus
-                    + " " + Item.Bless
-                    + " " + Item.Enchant
-                    + " " + Item.SocketOne
-                    + " " + Item.SocketTwo
-                    + " " + Item.Durability
-                + " " + Item.MaxDurability;
-                wrtr.Write("Inventory", "Item[" + i.ToString() + "]", Save);
-                i++;
+                cmd = new MySqlCommand(MySqlCommandType.INSERT);
+                cmd.Insert("accountsinventory");
+                cmd.Insert("accountEntityId", Hero.Identifier);
+                cmd.Insert("itemID", item.ID);
+                cmd.Insert("itemPlus", item.Plus);
+                cmd.Insert("itemBless", item.Bless);
+                cmd.Insert("itemEnchant", item.Enchant);
+                cmd.Insert("itemSocketOne", item.SocketOne);
+                cmd.Insert("itemSocketTwo", item.SocketTwo);
+                cmd.Insert("itemDurability", item.Durability);
+                cmd.Insert("itemMaxDurability", item.MaxDurability);
+                cmd.Execute();
             }
-            wrtr.Write("Inventory", "Count", i.ToString());
         }
 
         static public void LoadProfs(GameClient Hero)
