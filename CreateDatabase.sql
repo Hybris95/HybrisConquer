@@ -3219,6 +3219,7 @@ INSERT INTO `portals` VALUES (5, 377, 1015, 958, 555, 1002);
 INSERT INTO `portals` VALUES (402, 388, 1002, 51, 70, 1004);
 INSERT INTO `portals` VALUES (78, 320, 1000, 312, 646, 1001);
 INSERT INTO `portals` VALUES (313, 652, 1001, 85, 323, 1000);
+INSERT INTO `portals` VALUES (312, 651, 1001, 85, 323, 1000);
 INSERT INTO `portals` VALUES (5, 377, 1011, 958, 555, 1002);
 INSERT INTO `portals` VALUES (976, 668, 1000, 69, 473, 1002);
 INSERT INTO `portals` VALUES (377, 9, 1020, 555, 957, 1002);
@@ -4485,6 +4486,24 @@ CREATE TABLE `accountsinventory` (
   `itemSocketTwo` tinyint(4) NOT NULL,
   `itemDurability` smallint(6) unsigned NOT NULL,
   `itemMaxDurability` smallint(6) unsigned NOT NULL
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+
+-- 
+-- Table structure for table `accountsequipment`
+-- 
+
+CREATE TABLE `accountsequipment` (
+  `accountEntityId` int(10) unsigned NOT NULL,
+  `itemPosition` smallint(6) unsigned NOT NULL,
+  `itemID` int(10) unsigned NOT NULL,
+  `itemPlus` tinyint(4) NOT NULL,
+  `itemBless` tinyint(4) NOT NULL,
+  `itemEnchant` tinyint(4) NOT NULL,
+  `itemSocketOne` tinyint(4) NOT NULL,
+  `itemSocketTwo` tinyint(4) NOT NULL,
+  `itemDurability` smallint(6) unsigned NOT NULL,
+  `itemMaxDurability` smallint(6) unsigned NOT NULL,
+  PRIMARY KEY (`accountEntityId`,`itemPosition`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 --

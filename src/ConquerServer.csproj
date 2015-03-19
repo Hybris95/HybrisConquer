@@ -149,8 +149,10 @@
     <Compile Include="Networking\Packets\Team Packet.cs" />
     <Compile Include="Networking\Packets\Weather Packet.cs" />
     <Compile Include="Npc Dialog\Default.cs" />
+    <Compile Include="Npc Dialog\Desert City\Conductress.cs" />
     <Compile Include="Npc Dialog\Market\MarkConductress.cs" />
     <Compile Include="Npc Dialog\Twin City\Conductress.cs" />
+    <Compile Include="Npc Dialog\Twin City\GeneralPeace.cs" />
     <Compile Include="Npc Dialog\Twin City\Guild Director.cs" />
     <Compile Include="Server Base Code\Commands.cs" />
     <Compile Include="Server Base Code\Extentions.cs" />

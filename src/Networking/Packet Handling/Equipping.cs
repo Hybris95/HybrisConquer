@@ -27,7 +27,7 @@ namespace ConquerServer_Basic.Networking.Packet_Handling
                         case 13022:// DesertCityGate
                         {
                             // TODO - Can the character get teleported ?
-                            // TODO - Find map/coordinates
+                            Client.Teleport(1000, 500, 650);
                             return true;
                         }
                         case 13023:// ApeCityGate
@@ -244,47 +244,35 @@ namespace ConquerServer_Basic.Networking.Packet_Handling
                 }
                 else
                 {
-                    switch (EquipSlot)
+                    if (EquipItem.ID > 0)
                     {
-                        case 9:
-                            if (EquipItem.ID > 0)
-                            {
-                                Client.Entity.Armor = EquipItem.ID;
-                            }
-                            break;
-                        case 0:// HeadGears and Others
-                            if (EquipItem.ID > 0)
-                            {
+                        switch (EquipSlot)
+                        {
+                            case 0:// HeadGears and Others
                                 Client.Entity.HeadGear = EquipItem.ID;
-                            }
-                            break;
-                        case 2:
-                            if (Client.Entity.Armor == 0)
-                            {
+                                break;
+                            case 3:
                                 Client.Entity.Armor = EquipItem.ID;
-                            }
-                            break;
-                        case 4:
-                            if (EquipItem.ID > 0)
-                            {
+                                break;
+                            case 4:
                                 Client.Entity.LeftArm = EquipItem.ID;
-                            }
-                            break;
-                        case 5:
-                            if (EquipItem.ID > 0)
-                            {
+                                break;
+                            case 5:
                                 Client.Entity.MainHand = EquipItem.ID;
-                            }
-                            break;
-                        case 8:// Boots
-                            if (EquipItem.ID > 0)
-                            {
-                                // TODO - Create the required Boots attribute in Client.Entity
-                            }
-                            goto default;
-                        default:
-                            Console.Error.WriteLine("TODO - " + EquipItem.ID + " tryed to be equipped on slot : " + EquipSlot);
-                            break;
+                                break;
+                            /*case 6:
+                                Client.Entity.Ring = EquipItem.ID;
+                                break;*/
+                            /*case 8:
+                                Client.Entity.Boots = EquipItem.ID;
+                                break;*/
+                            case 9:
+                                Client.Entity.Armor = EquipItem.ID;
+                                break;
+                            default:
+                                Console.Error.WriteLine("TODO - " + EquipItem.ID + " tryed to be equipped on slot : " + EquipSlot);
+                                break;
+                        }
                     }
                     Client.RemoveInventory(EquipItem.UID);
                     NewMath.Vitals(Client);

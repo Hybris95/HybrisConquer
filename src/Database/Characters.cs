@@ -240,68 +240,80 @@ namespace ConquerServer_Basic
 
         static public void LoadEquips(GameClient Client)
         {
-            IniFile rdr = new IniFile(Misc.DatabasePath + @"\Equips\" + Client.Username + ".ini");
-            for (sbyte i = 0; i < 9; i++)
+            MySqlCommand cmd = new MySqlCommand(MySqlCommandType.SELECT);
+            cmd.Select("accountsinventory").Where("accountEntityId", Client.Identifier);
+            MySqlReader r = new MySqlReader(cmd);
+            while (r.Read())
             {
-                string[] Item = (rdr.ReadString("Equips", "Item[" + i.ToString() + "]", String.Empty)).Split(' ');
-                if (Item.Length < 2) continue;
                 ItemDataPacket LoadedItem = new ItemDataPacket(true);
-                LoadedItem.ID = uint.Parse(Item[0]);
-                LoadedItem.Plus = byte.Parse(Item[1]);
-                LoadedItem.Enchant = byte.Parse(Item[2]);
-                LoadedItem.Bless = byte.Parse(Item[3]);
-                LoadedItem.SocketOne = byte.Parse(Item[4]);
-                LoadedItem.SocketTwo = byte.Parse(Item[5]);
-                LoadedItem.Durability = ushort.Parse(Item[6]);
-                LoadedItem.MaxDurability = ushort.Parse(Item[7]);
+                LoadedItem.Position = r.ReadUInt16("itemPosition");
+                LoadedItem.ID = r.ReadUInt32("itemID");
+                LoadedItem.Plus = r.ReadByte("itemPlus");
+                LoadedItem.Bless = r.ReadByte("itemBless");
+                LoadedItem.Enchant = r.ReadByte("itemEnchant");
+                LoadedItem.SocketOne = r.ReadByte("itemSocketOne");
+                LoadedItem.SocketTwo = r.ReadByte("itemSocketTwo");
+                LoadedItem.Durability = r.ReadUInt16("itemDurability");
+                LoadedItem.MaxDurability = r.ReadUInt16("itemMaxDurability");
                 LoadedItem.UID = ItemDataPacket.NextItemUID;
-                Client.Equip(LoadedItem, (ushort)(i + 1));
-                if (i == 8)
+                Client.Equip(LoadedItem, LoadedItem.Position);
+                if (LoadedItem.ID > 0)
                 {
-                    if (LoadedItem.ID > 0)
+                    switch (LoadedItem.Position)
                     {
-                        Client.Entity.Armor = LoadedItem.ID;
-                    }
-                    else if (LoadedItem.ID == 0) { Client.Entity.Armor = 0; }
-                }
-                if (i == 0)
-                {
-                    if (LoadedItem.ID > 0)
-                    {
-                        Client.Entity.HeadGear = LoadedItem.ID;
-                    }
-                }
-                if (i == 2)
-                {
-                    if (Client.Entity.Armor == 0)
-                    { Client.Entity.Armor = LoadedItem.ID; }
-                }
-                if (i == 3)
-                {
-                    if (LoadedItem.ID > 0)
-                    {
-                        Client.Entity.LeftArm = LoadedItem.ID;
-                    }
-                }
-                if (i == 4)
-                {
-                    if (LoadedItem.ID > 0)
-                    {
-                        Client.Entity.MainHand = LoadedItem.ID;
+                        case 0:
+                            Client.Entity.HeadGear = LoadedItem.ID;
+                            break;
+                        case 3:
+                            Client.Entity.Armor = LoadedItem.ID;
+                            break;
+                        case 4:
+                            Client.Entity.LeftArm = LoadedItem.ID;
+                            break;
+                        case 5:
+                            Client.Entity.MainHand = LoadedItem.ID;
+                            break;
+                        /*case 6:
+                            Client.Entity.Ring = LoadedItem.ID;
+                            break;*/
+                        /*case 8:
+                            Client.Entity.Boots = LoadedItem.ID;
+                            break;*/
+                        case 9:
+                            Client.Entity.Armor = LoadedItem.ID;
+                            break;
+                        default:
+                            Console.WriteLine("Unmanaged Item : {0} - Position : {1}", LoadedItem.ID, LoadedItem.Position);
+                            break;
                     }
                 }
             }
         }
         static public void SaveEquips(GameClient Client)
         {
-            IniFile wrtr = new IniFile(Misc.DatabasePath + @"\Equips\" + Client.Username + ".ini");
             lock (Client.Equipment)
             {
-                sbyte i = 0;
-                foreach (KeyValuePair<ushort, IConquerItem> DE in Client.Equipment)
+                MySqlCommand cmd = new MySqlCommand(MySqlCommandType.DELETE);
+                cmd.Delete("accountsequipment", "accountEntityId", Client.Identifier);
+                cmd.Execute();
+
+                foreach (KeyValuePair<ushort, IConquerItem> equipment in Client.Equipment)
                 {
-                    wrtr.Write("Equips", "Item[" + (DE.Key - 1).ToString() + "]", DE.Value.ToString());
-                    i++;
+                    ushort position = equipment.Key;
+                    IConquerItem item = equipment.Value;
+                    cmd = new MySqlCommand(MySqlCommandType.INSERT);
+                    cmd.Insert("accountsequipment");
+                    cmd.Insert("accountEntityId", Client.Identifier);
+                    cmd.Insert("itemPosition", position);
+                    cmd.Insert("itemID", item.ID);
+                    cmd.Insert("itemPlus", item.Plus);
+                    cmd.Insert("itemBless", item.Bless);
+                    cmd.Insert("itemEnchant", item.Enchant);
+                    cmd.Insert("itemSocketOne", item.SocketOne);
+                    cmd.Insert("itemSocketTwo", item.SocketTwo);
+                    cmd.Insert("itemDurability", item.Durability);
+                    cmd.Insert("itemMaxDurability", item.MaxDurability);
+                    cmd.Execute();
                 }
             }
         }

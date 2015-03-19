@@ -72,15 +72,23 @@ namespace ConquerServer_Basic
             {
                 ///Twin City\\\
                 case 10050: ConductressTC.Npc(Client, OptionID, Input); break;
+                case 10054: GeneralPeace.Npc(Client, OptionID, Input); break;
                 case 10003: GuildDirector.Npc(Client, OptionID, Input, Packet); break;
+
+                ///Desert City\\\
+                case 10051: ConductressDC.Npc(Client, OptionID, Input); break;
 
                 ///Market\\\
                 case 45: ConductressMarket.Npc(Client, OptionID, Input); break;
 
                 ///Default\\\
-                default: Default.Npc(Client, OptionID, Input); break;
+                default:
+                {
+                    Default.Npc(Client, OptionID, Input);
+                    Console.WriteLine("NPC[{0}] is not implemented!", Client.ActiveNpcID);
+                    break;
+                }
             }
-            Console.WriteLine(Client.ActiveNpcID);
         }
     }
 }
