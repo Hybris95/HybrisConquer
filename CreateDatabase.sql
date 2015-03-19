@@ -4454,8 +4454,20 @@ INSERT INTO `wepexpreq` VALUES (20, 0);
 CREATE TABLE `accountsskills` (
   `accountEntityId` int(10) unsigned NOT NULL,
   `skillId` int(10) unsigned NOT NULL,
-  `skillLevel` int(11) unsigned NOT NULL,
-  `skillExp` int(11) unsigned NOT NULL,
+  `skillLevel` int(10) unsigned NOT NULL,
+  `skillExp` int(10) unsigned NOT NULL,
+  PRIMARY KEY (`accountEntityId`,`skillId`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+
+-- 
+-- Table structure for table `accountsprofs`
+-- 
+
+CREATE TABLE `accountsprofs` (
+  `accountEntityId` int(10) unsigned NOT NULL,
+  `skillId` int(10) unsigned NOT NULL,
+  `skillLevel` int(10) unsigned NOT NULL,
+  `skillExp` int(10) unsigned NOT NULL,
   PRIMARY KEY (`accountEntityId`,`skillId`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 

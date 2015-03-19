@@ -183,33 +183,34 @@ namespace ConquerServer_Basic
 
         static public void LoadProfs(GameClient Hero)
         {
-            // TODO - Load Profs in Database instead of Flat File
-            IniFile rdr = new IniFile(Misc.DatabasePath + @"\Profs\" + Hero.Username + ".ini");
-            sbyte count = rdr.ReadSByte("Prof", "Count", 0);
-            for (sbyte i = 0; i < count; i++)
+            MySqlCommand cmd = new MySqlCommand(MySqlCommandType.SELECT);
+            cmd.Select("accountsprofs").Where("accountEntityId", Hero.Identifier);
+            MySqlReader r = new MySqlReader(cmd);
+            while (r.Read())
             {
-                string[] Skill = (rdr.ReadString("Prof", "Prof[" + i.ToString() + "]", String.Empty)).Split(' ');
-                ProfPacket Profi = new ProfPacket(true);
-                Profi.ID = ushort.Parse(Skill[0]);
-                Profi.Level = ushort.Parse(Skill[1]);
-                Profi.Experience = uint.Parse(Skill[2]);
-                Hero.LearnProf(Profi);
+                ProfPacket LoadedProf = new ProfPacket(true);
+                LoadedProf.ID = r.ReadUInt16("skillId");
+                LoadedProf.Level = r.ReadUInt16("skilLLevel");
+                LoadedProf.Experience = r.ReadUInt32("skilLExp");
+                Hero.LearnProf(LoadedProf);
             }
         }
         static public void SaveProfs(GameClient Hero)
         {
-            // TODO - Save Profs in Database instead of Flat File
-            if (File.Exists(Misc.DatabasePath + @"\Profs\" + Hero.Username + ".ini"))
-                File.Delete(Misc.DatabasePath + @"\Profs\" + Hero.Username + ".ini");
-            IniFile wrtr = new IniFile(Misc.DatabasePath + @"\Profs\" + Hero.Username + ".ini");
+            MySqlCommand cmd = new MySqlCommand(MySqlCommandType.DELETE);
+            cmd.Delete("accountsprofs", "accountEntityId", Hero.Identifier);
+            cmd.Execute();
 
-            sbyte i = 0;
-            foreach (ISkill skill in Hero.Profs.Values)
+            foreach (ISkill prof in Hero.Profs.Values)
             {
-                wrtr.Write("Prof", "Prof[" + i + "]", skill.ID + " " + skill.Level + " " + skill.Experience);
-                i++;
+                cmd = new MySqlCommand(MySqlCommandType.INSERT);
+                cmd.Insert("accountsprofs");
+                cmd.Insert("accountEntityId", Hero.Identifier);
+                cmd.Insert("skillId", prof.ID);
+                cmd.Insert("skilLLevel", prof.Level);
+                cmd.Insert("skillExp", prof.Experience);
+                cmd.Execute();
             }
-            wrtr.Write("Prof", "Count", i.ToString());
         }
 
         static public void LoadSkills(GameClient Hero)
