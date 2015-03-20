@@ -766,6 +766,11 @@ namespace ConquerServer_Basic
                 return true;
             }
         }
+        public bool CanLearnSpell(ushort ID, ushort Level)
+        {
+            // TODO - Check if the character can learn a specific spell
+            return true;
+        }
         public bool LearnSpell(ushort ID, ushort Level)
         {
             ISkill Spell = new SpellPacket(true);

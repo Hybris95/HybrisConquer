@@ -79,11 +79,22 @@ namespace ConquerServer_Basic.Networking.Packet_Handling
                         ISkill skillLearnt = null;
                         if (itemSkill.SkillID != 0 && !Client.Spells.TryGetValue(itemSkill.SkillID, out skillLearnt))
                         {
-                            // TODO - Check if the character can learn it (especially for spells)
-                            if (Client.LearnSpell(itemSkill.SkillID, 0))
+                            if (Client.CanLearnSpell(itemSkill.SkillID, 0))
                             {
-                                // TODO - Delete the item
+                                if (Client.LearnSpell(itemSkill.SkillID, 0))
+                                {
+                                    // TODO - Delete the item
+                                }
                             }
+                            else
+                            {
+                                return false;
+                            }
+                        }
+                        else
+                        {
+                            Console.WriteLine("[UseItem()] Unmanaged Skill : {0}", itemSkill.SkillID);
+                            return false;
                         }
                     }
                     else
