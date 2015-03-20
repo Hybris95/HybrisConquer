@@ -45,6 +45,7 @@ namespace ConquerServer_Basic.Attack_Handling
                     cPacket.AttackedY = (ushort)y;
                     Hero.SkillID = SkillId;
 
+                    // TODO - Optimize here if there is no target
                     foreach (GameClient Attacked in Kernel.Clients)
                     {
                         if (Attacked.Entity.UID == Target)
@@ -63,6 +64,7 @@ namespace ConquerServer_Basic.Attack_Handling
                 {
                     if (cPacket.AttackType == (ushort)EntityFlag.Monster)
                     {
+                        // TODO - Optimize here if there is no target
                         foreach (Entity Attacked in Kernel.eMonsters.Values)
                         {
                             if (Attacked.UID == cPacket.AttackedUID)
@@ -76,6 +78,7 @@ namespace ConquerServer_Basic.Attack_Handling
                     }
                     else
                     {
+                        // TODO - Optimize here if there is no target
                         foreach (GameClient Attacked in Kernel.Clients)
                         {
                             if (Attacked.Entity.UID == cPacket.AttackedUID)
