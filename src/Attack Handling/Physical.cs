@@ -15,6 +15,12 @@ namespace ConquerServer_Basic.Attack_Handling
             AttackPacket atkPacket = new AttackPacket(true);
             atkPacket.Deserialize(Hero.Packet);
 
+            if (Hero.Attacked == null)
+            {
+                // TODO - Manage non-targeted skills
+                Console.WriteLine("[Physical.Attack()] Unmanaged non-targeted attack");
+                return;
+            }
             if (Hero.Attacked.Dead)
                 return;
             if (Hero.Attacked.MapID != Hero.Entity.MapID)
@@ -146,6 +152,9 @@ namespace ConquerServer_Basic.Attack_Handling
 
                         break;
                     }
+                default:
+                    Console.WriteLine("[Physical.Attack()] Unmanaged Target EntityFlag : {0}", Hero.Attacked.EntityFlag);
+                    break;
             }
         }
     }

@@ -31,7 +31,9 @@ namespace ConquerServer_Basic.Item.Item_Usage_Handle
                 Message.Send(Hero, "Dropped an Item.", 0x00FFFFFF, MessagePacket.TopLeft);
             }
             else
+            {
                 Message.Send(Hero, "You don't have that item to drop.", 0x00FFFFFF, MessagePacket.TopLeft);
+            }
         }
 
     }

@@ -23,7 +23,7 @@ namespace ConquerServer_Basic.Networking.Packet_Handling
                             if (Client.CanTeleport())
                             {
                                 Client.Teleport(1002, 430, 380);
-                                // TODO - Delete the item
+                                Client.RemoveInventory(Item.UID);
                             }
                             return true;
                         }
@@ -32,7 +32,7 @@ namespace ConquerServer_Basic.Networking.Packet_Handling
                             if (Client.CanTeleport())
                             {
                                 Client.Teleport(1000, 500, 650);
-                                // TODO - Delete the item
+                                Client.RemoveInventory(Item.UID);
                             }
                             return true;
                         }
@@ -41,7 +41,7 @@ namespace ConquerServer_Basic.Networking.Packet_Handling
                             if (Client.CanTeleport())
                             {
                                 Client.Teleport(1020, 566, 565);
-                                // TODO - Delete the item
+                                Client.RemoveInventory(Item.UID);
                             }
                             return true;
                         }
@@ -50,7 +50,7 @@ namespace ConquerServer_Basic.Networking.Packet_Handling
                             if (Client.CanTeleport())
                             {
                                 Client.Teleport(1011, 193, 266);
-                                // TODO - Delete the item
+                                Client.RemoveInventory(Item.UID);
                             }
                             return true;
                         }
@@ -59,7 +59,7 @@ namespace ConquerServer_Basic.Networking.Packet_Handling
                             if (Client.CanTeleport())
                             {
                                 Client.Teleport(1015, 717, 577);
-                                // TODO - Delete the item
+                                Client.RemoveInventory(Item.UID);
                             }
                             return true;
                         }
@@ -83,7 +83,7 @@ namespace ConquerServer_Basic.Networking.Packet_Handling
                             {
                                 if (Client.LearnSpell(itemSkill.SkillID, 0))
                                 {
-                                    // TODO - Delete the item
+                                    Client.RemoveInventory(Item.UID);
                                 }
                             }
                             else

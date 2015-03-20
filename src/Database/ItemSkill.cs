@@ -35,12 +35,12 @@ namespace ConquerServer_Basic
                     count++;
                 }
             }
-            Console.WriteLine("ItemsStats Loaded [{0}]", count);
+            Console.WriteLine("ItemsSkills Loaded [{0}]", count);
         }
         static public void Unload()
         {
             Kernel.ItemsSkills.Clear();
-            Console.WriteLine("ItemsStats Unloaded.");
+            Console.WriteLine("ItemsSkills Unloaded.");
         }
     }
 }
