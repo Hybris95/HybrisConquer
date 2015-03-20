@@ -88,10 +88,13 @@ namespace ConquerServer_Basic.Networking.Packet_Handling
         static public void CompleteLogin(GameClient Client)
         {
             if (Kernel.Guilds.Count > 0)
+            {
                 foreach (Guild guild in Kernel.Guilds.Values)
                 {
                     Guild.SendGuildName(Client, guild);
                 }
+            }
+
             if (Client.Entity.GuildID != 0)
             {
                 Client.MyGuild = Guild.GetGuild(Client.Entity.GuildID);
@@ -103,7 +106,9 @@ namespace ConquerServer_Basic.Networking.Packet_Handling
                 }
             }
             else
+            {
                 Client.MyGuild = null;
+            }
 
             Client.Send(PacketBuilder.Nobility(Client));
             Empire.NewEmpire(Client);
@@ -130,9 +135,8 @@ namespace ConquerServer_Basic.Networking.Packet_Handling
                 Client.Send(sync);
             }
             Client.AuthPhase = AuthPhases.FullLogin;
-            Client.Send(new MessagePacket("Welcome to Arco Online. We are currently in closed alpha testing.", Client.Entity.Name, "SYSTEM", Color.White, ChatType.Talk));
-            Client.Send(new MessagePacket("Please refer to the commands.txt document you recieved upon downloading the client.", Client.Entity.Name, "SYSTEM", Color.White, ChatType.Talk));
-            Client.Send(new MessagePacket("Please report anything to us that you find wrong. Have fun.", Client.Entity.Name, "SYSTEM", Color.White, ChatType.Talk));
+            Client.Send(new MessagePacket("Welcome to Hybris Conquer Server.", Client.Entity.Name, "SYSTEM", Color.White, ChatType.Talk));
+            Client.Send(new MessagePacket("Please report anything to us that you find wrong.", Client.Entity.Name, "SYSTEM", Color.White, ChatType.Talk));
         }
         static public void AppendLocation(GameClient Client, DataPacket Packet)
         {

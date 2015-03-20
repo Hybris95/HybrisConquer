@@ -522,6 +522,13 @@ namespace ConquerServer_Basic
             }
         }
 
+        #region Teleport
+        public bool CanTeleport()
+        {
+            // TODO - Make sure the character can get teleported ?
+            // TODO - Example some maps may disallow teleport from scrolls
+            return true;
+        }
         public void Teleport(UInt16 _MapID, UInt16 _X, UInt16 _Y)
         {
             DataPacket Packet = new DataPacket(true);
@@ -540,6 +547,7 @@ namespace ConquerServer_Basic
             Packet.wParam2 = this.Entity.Y;
             this.Send(Packet);
         }
+        #endregion
 
         public void SendScreen(Byte[] Msg, Boolean SendSelf)
         {

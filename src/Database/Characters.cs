@@ -260,7 +260,7 @@ namespace ConquerServer_Basic
         static public void LoadEquips(GameClient Client)
         {
             MySqlCommand cmd = new MySqlCommand(MySqlCommandType.SELECT);
-            cmd.Select("accountsinventory").Where("accountEntityId", Client.Identifier);
+            cmd.Select("accountsequipment").Where("accountEntityId", Client.Identifier);
             MySqlReader r = new MySqlReader(cmd);
             while (r.Read())
             {

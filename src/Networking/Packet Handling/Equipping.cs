@@ -20,37 +20,47 @@ namespace ConquerServer_Basic.Networking.Packet_Handling
                     {
                         case 13021:// TwinCityGate
                         {
-                            // TODO - Can the character get teleported ?
-                            Client.Teleport(1002, 430, 380);
-                            // TODO - Delete the item
+                            if (Client.CanTeleport())
+                            {
+                                Client.Teleport(1002, 430, 380);
+                                // TODO - Delete the item
+                            }
                             return true;
                         }
                         case 13022:// DesertCityGate
                         {
-                            // TODO - Can the character get teleported ?
-                            Client.Teleport(1000, 500, 650);
-                            // TODO - Delete the item
+                            if (Client.CanTeleport())
+                            {
+                                Client.Teleport(1000, 500, 650);
+                                // TODO - Delete the item
+                            }
                             return true;
                         }
                         case 13023:// ApeCityGate
                         {
-                            // TODO - Can the character get teleported ?
-                            Client.Teleport(1020, 566, 565);
-                            // TODO - Delete the item
+                            if (Client.CanTeleport())
+                            {
+                                Client.Teleport(1020, 566, 565);
+                                // TODO - Delete the item
+                            }
                             return true;
                         }
                         case 13024:// CastleGate
                         {
-                            // TODO - Can the character get teleported ?
-                            Client.Teleport(1011, 193, 266);
-                            // TODO - Delete the item
+                            if (Client.CanTeleport())
+                            {
+                                Client.Teleport(1011, 193, 266);
+                                // TODO - Delete the item
+                            }
                             return true;
                         }
                         case 13025:// BirdIslandGate
                         {
-                            // TODO - Can the character get teleported ?
-                            Client.Teleport(1015, 717, 577);
-                            // TODO - Delete the item
+                            if (Client.CanTeleport())
+                            {
+                                Client.Teleport(1015, 717, 577);
+                                // TODO - Delete the item
+                            }
                             return true;
                         }
                         default:
@@ -309,9 +319,6 @@ namespace ConquerServer_Basic.Networking.Packet_Handling
                     throw new Exception("PacketProcessor::UnequipGear() -> Failed to call Client.Unequip()");
                 switch (EquipSlot)
                 {
-                    /*case 0:
-                        // TODO - Find the place
-                        break;*/
                     /*case 1:
                         Client.Entity.HeadGear = 0;
                         break;*/
