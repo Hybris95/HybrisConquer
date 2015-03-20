@@ -22,35 +22,40 @@ namespace ConquerServer_Basic.Networking.Packet_Handling
                         {
                             // TODO - Can the character get teleported ?
                             Client.Teleport(1002, 430, 380);
+                            // TODO - Delete the item
                             return true;
                         }
                         case 13022:// DesertCityGate
                         {
                             // TODO - Can the character get teleported ?
                             Client.Teleport(1000, 500, 650);
+                            // TODO - Delete the item
                             return true;
                         }
                         case 13023:// ApeCityGate
                         {
                             // TODO - Can the character get teleported ?
                             Client.Teleport(1020, 566, 565);
+                            // TODO - Delete the item
                             return true;
                         }
                         case 13024:// CastleGate
                         {
                             // TODO - Can the character get teleported ?
                             Client.Teleport(1011, 193, 266);
+                            // TODO - Delete the item
                             return true;
                         }
                         case 13025:// BirdIslandGate
                         {
                             // TODO - Can the character get teleported ?
                             Client.Teleport(1015, 717, 577);
+                            // TODO - Delete the item
                             return true;
                         }
                         default:
                         {
-                            Console.WriteLine("ActionID : {0} is not managed!", itemStats.Action);
+                            Console.WriteLine("[UseItem()] ActionID : {0} is not managed!", itemStats.Action);
                             break;
                         }
                     }
@@ -191,7 +196,7 @@ namespace ConquerServer_Basic.Networking.Packet_Handling
                         }
                         default:
                         {
-                            Console.WriteLine("Unmanaged SkillBook : {0}", itemStats.ItemID);
+                            Console.WriteLine("[UseItem()] Unmanaged SkillBook : {0}", itemStats.ItemID);
                             break;
                         }
 
@@ -200,7 +205,10 @@ namespace ConquerServer_Basic.Networking.Packet_Handling
                     if (skillID != 0 && !Client.Spells.TryGetValue(skillID, out skillLearnt))
                     {
                         // TODO - Check if the character can learn it (especially for spells)
-                        Client.LearnSpell(skillID, 0);
+                        if (Client.LearnSpell(skillID, 0))
+                        {
+                            // TODO - Delete the item
+                        }
                     }
                     return true;
                 }
@@ -210,7 +218,7 @@ namespace ConquerServer_Basic.Networking.Packet_Handling
                     {
                         default:
                             {
-                                // TODO - Say what item can't be used (if not an equipement)
+                                Console.WriteLine("[UseItem()] Unmanaged Item : {0}", Item.ID);
                                 break;
                             }
                     }
@@ -224,62 +232,71 @@ namespace ConquerServer_Basic.Networking.Packet_Handling
             IConquerItem EquipItem = Client.GetInventoryItem(Packet.UID);
             if (EquipItem != null)
             {
-                if (UseItem(Client, EquipItem))
-                {
-                    Client.RemoveInventory(EquipItem.UID);
-                    return;
-                }
-
                 ushort EquipSlot = (ushort)Packet.dwParam;
-                if (Client.Equipment.ContainsKey(EquipSlot))
+                switch (EquipSlot)
                 {
-                    if (!Client.Unequip(EquipSlot))
+                    case 0:
                     {
-                        throw new Exception("PacketProcessor::EquipGear() -> Failed to call Client.Unequip()");
+                        UseItem(Client, EquipItem);
+                        return;
                     }
-                }
-                if (!Client.Equip(EquipItem, EquipSlot))
-                {
-                    throw new Exception("PacketProcessor::EquipGear() -> Failed to call Client.Equip()");
-                }
-                else
-                {
-                    if (EquipItem.ID > 0)
+                    default:
                     {
-                        switch (EquipSlot)
+                        if (Client.Equipment.ContainsKey(EquipSlot))
                         {
-                            case 0:// HeadGears and Others
-                                Client.Entity.HeadGear = EquipItem.ID;
-                                break;
-                            case 3:
-                                Client.Entity.Armor = EquipItem.ID;
-                                break;
-                            case 4:
-                                Client.Entity.LeftArm = EquipItem.ID;
-                                break;
-                            case 5:
-                                Client.Entity.MainHand = EquipItem.ID;
-                                break;
-                            /*case 6:
-                                Client.Entity.Ring = EquipItem.ID;
-                                break;*/
-                            /*case 8:
-                                Client.Entity.Boots = EquipItem.ID;
-                                break;*/
-                            case 9:
-                                Client.Entity.Armor = EquipItem.ID;
-                                break;
-                            default:
-                                Console.Error.WriteLine("TODO - " + EquipItem.ID + " tryed to be equipped on slot : " + EquipSlot);
-                                break;
+                            if (!Client.Unequip(EquipSlot))
+                            {
+                                throw new Exception("PacketProcessor::EquipGear() -> Failed to call Client.Unequip()");
+                            }
                         }
+                        if (!Client.Equip(EquipItem, EquipSlot))
+                        {
+                            throw new Exception("PacketProcessor::EquipGear() -> Failed to call Client.Equip()");
+                        }
+                        else
+                        {
+                            switch (EquipSlot)
+                            {
+                                case 1:
+                                    Client.Entity.HeadGear = EquipItem.ID;
+                                    break;
+                                /*case 2:
+                                    Client.Entity.Necklace = EquipItem.ID;
+                                    break;*/
+                                case 3:
+                                    Client.Entity.Armor = EquipItem.ID;
+                                    break;
+                                case 4:
+                                    Client.Entity.LeftArm = EquipItem.ID;
+                                    break;
+                                case 5:
+                                    Client.Entity.MainHand = EquipItem.ID;
+                                    break;
+                                /*case 6:
+                                    Client.Entity.Ring = EquipItem.ID;
+                                    break;*/
+                                /*case 7:
+                                    Client.Entity.Talisman = EquiItem.ID;
+                                    break;*/
+                                /*case 8:
+                                    Client.Entity.Boots = EquipItem.ID;
+                                    break;*/
+                                /*case 9:
+                                    Client.Entity.Garment = EquipItem.ID;
+                                    break;*/
+                                default:
+                                    Console.Error.WriteLine("[EquipGear()] Unmanaged EquipSlot[{0}] for ItemID[{1}]", EquipSlot, EquipItem.ID);
+                                    break;
+                            }
+                            Client.RemoveInventory(EquipItem.UID);
+                            NewMath.Vitals(Client);
+                            Client.CalculateDamageBoost();
+                            Client.SendStatMessage();
+                            Client.SendScreen(Client.Entity.SpawnPacket, true);
+                            Client.Screen.Reload(true, null);
+                        }
+                        break;
                     }
-                    Client.RemoveInventory(EquipItem.UID);
-                    NewMath.Vitals(Client);
-                    Client.CalculateDamageBoost();
-                    Client.SendStatMessage();
-                    Client.SendScreen(Client.Entity.SpawnPacket, true);
-                    Client.Screen.Reload(true, null);
                 }
             }
         }
@@ -290,49 +307,41 @@ namespace ConquerServer_Basic.Networking.Packet_Handling
             {
                 if (!Client.Unequip(EquipSlot))
                     throw new Exception("PacketProcessor::UnequipGear() -> Failed to call Client.Unequip()");
-                if (EquipSlot == 9)
+                switch (EquipSlot)
                 {
-                    for (int ID = 1; ID < Client.Equipment.Count; ID++)
-                    {
-                        if (Client.Equipment.ContainsKey((ushort)ID))
-                        {
-                            if (Client.Equipment[(ushort)ID].ID >= 130203 && Client.Equipment[(ushort)ID].ID <= 139999)
-                            {
-                                Client.Entity.Armor = Client.Equipment[(ushort)ID].ID;
-                            }
-                        }
-                    }
-                }
-                if (EquipSlot == 3)
-                {
-                    for (int ID = 1; ID < Client.Equipment.Count; ID++)
-                    {
-                        if (Client.Equipment.ContainsKey((ushort)ID))
-                        {
-                            if (Client.Equipment[(ushort)ID].ID <= 137300 && Client.Equipment[(ushort)ID].ID >= 137970)
-                            {
-                                Client.Entity.Armor = Client.Equipment[(ushort)ID].ID;
-                            }
-                        }
-                    }
-                }
-                if (EquipSlot == 5)
-                {
-                    {
-                        Client.Entity.MainHand = 0;
-                    }
-                }
-                if (EquipSlot == 4)
-                {
-                    {
-                        Client.Entity.LeftArm = 0;
-                    }
-                }
-                if (EquipSlot == 0)
-                {
-                    {
+                    /*case 0:
+                        // TODO - Find the place
+                        break;*/
+                    /*case 1:
                         Client.Entity.HeadGear = 0;
-                    }
+                        break;*/
+                    /*case 2:
+                        Client.Entity.Necklace = 0;
+                        break;*/
+                    case 3:
+                        Client.Entity.Armor = 0;
+                        break;
+                    case 4:
+                        Client.Entity.LeftArm = 0;
+                        break;
+                    case 5:
+                        Client.Entity.MainHand = 0;
+                        break;
+                    /*case 6:
+                        Client.Entity.Ring = 0;
+                        break;*/
+                    /*case 7:
+                        Client.Entity.Talisman = 0;
+                        break;*/
+                    /*case 8:
+                        Client.Entity.Boots = 0;
+                        break;*/
+                    /*case 9:
+                        Client.Entity.Garment = 0;
+                        break;*/
+                    default:
+                        Console.WriteLine("[UnequipGear()] Unmanaged EquipSlot[{0}]", EquipSlot);
+                        break;
                 }
                 Client.SendScreen(Packet, true);
                 NewMath.Vitals(Client);

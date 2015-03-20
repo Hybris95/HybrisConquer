@@ -660,10 +660,9 @@ namespace ConquerServer_Basic
         #region Equipment Functions
         public void SendStatMessage()
         {
-            MessagePacket Msg = new MessagePacket(" Attack: {0}~{1} MagicAttack: {2} Defence: {3} MDefence: {4} Dodge: {5}",
-                (uint)Color.White, (uint)ChatType.Center);
-            Msg.Message = String.Format(Msg.Message,
-                new object[] { this.Entity.MinAttack, this.Entity.MaxAttack, this.Entity.MagicAttack, this.Entity.Defence, (this.Entity.MDefence + this.Entity.PlusMDefence), this.Entity.Dodge });
+            String formattedMessage = String.Format(" Attack: {0}~{1} MagicAttack: {2} Defence: {3} MDefence: {4} Dodge: {5}", 
+                this.Entity.MinAttack, this.Entity.MaxAttack, this.Entity.MagicAttack, this.Entity.Defence, (this.Entity.MDefence + this.Entity.PlusMDefence), this.Entity.Dodge);
+            MessagePacket Msg = new MessagePacket(formattedMessage, (uint)Color.White, (uint)ChatType.Center);
             this.Send(Msg);
         }
         public void RemoveEquip(byte EquipSlot)
@@ -747,6 +746,7 @@ namespace ConquerServer_Basic
             uint ghostModel = 0;
             switch (DeadClient.Entity.Model)
             {
+                default:
                 case 1003:
                 case 1004:
                     ghostModel = 15099;
@@ -754,9 +754,6 @@ namespace ConquerServer_Basic
                 case 2001:
                 case 2002:
                     ghostModel = 15199;
-                    break;
-                default:
-                    ghostModel = 15099;
                     break;
             }
 

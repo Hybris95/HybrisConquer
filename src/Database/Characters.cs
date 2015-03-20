@@ -13,9 +13,23 @@ namespace ConquerServer_Basic
 {
     class Characters
     {
-        static byte Color = (byte)Kernel.Random.Next(4, 9);
-        static ushort HairStyle = (ushort)(Color * 100 + 10 + (byte)Kernel.Random.Next(4, 9));
-       
+        #region RandomGeneration
+        static byte RandomHairColor
+        {
+            get {
+                return (byte)Kernel.Random.Next(4, 9);
+            }
+        }
+
+        static ushort RandomHairStyle
+        {
+            get
+            {
+                return (ushort)(RandomHairColor * 100 + 10 + (byte)Kernel.Random.Next(4, 9));
+            }
+        }
+        #endregion
+        #region Character
         static public Boolean LoadCharacter(GameClient Client)
         {
             bool res = false;
@@ -126,11 +140,79 @@ namespace ConquerServer_Basic
             cmd.Set("class", Class);
             cmd.Set("avatar", Avatar);
             cmd.Set("model", Model);
-            cmd.Set("hairstyle", HairStyle);
+            cmd.Set("hairstyle", RandomHairStyle);
             cmd.Where("entityid", Client.Identifier);
             cmd.Execute();
         }
-        
+        #endregion
+        #region Profs
+        static public void LoadProfs(GameClient Hero)
+        {
+            MySqlCommand cmd = new MySqlCommand(MySqlCommandType.SELECT);
+            cmd.Select("accountsprofs").Where("accountEntityId", Hero.Identifier);
+            MySqlReader r = new MySqlReader(cmd);
+            while (r.Read())
+            {
+                ProfPacket LoadedProf = new ProfPacket(true);
+                LoadedProf.ID = r.ReadUInt16("skillId");
+                LoadedProf.Level = r.ReadUInt16("skilLLevel");
+                LoadedProf.Experience = r.ReadUInt32("skilLExp");
+                Hero.LearnProf(LoadedProf);
+            }
+        }
+        static public void SaveProfs(GameClient Hero)
+        {
+            MySqlCommand cmd = new MySqlCommand(MySqlCommandType.DELETE);
+            cmd.Delete("accountsprofs", "accountEntityId", Hero.Identifier);
+            cmd.Execute();
+
+            foreach (ISkill prof in Hero.Profs.Values)
+            {
+                cmd = new MySqlCommand(MySqlCommandType.INSERT);
+                cmd.Insert("accountsprofs");
+                cmd.Insert("accountEntityId", Hero.Identifier);
+                cmd.Insert("skillId", prof.ID);
+                cmd.Insert("skilLLevel", prof.Level);
+                cmd.Insert("skillExp", prof.Experience);
+                cmd.Execute();
+            }
+        }
+        #endregion
+        #region Skills
+        static public void LoadSkills(GameClient Hero)
+        {
+            MySqlCommand cmd = new MySqlCommand(MySqlCommandType.SELECT);
+            cmd.Select("accountsskills").Where("accountEntityId", Hero.Identifier);
+            MySqlReader r = new MySqlReader(cmd);
+            while (r.Read())
+            {
+                ISkill LoadedSkill = new SpellPacket(true);
+                LoadedSkill.ID = r.ReadUInt16("skillId");
+                LoadedSkill.Level = r.ReadUInt16("skilLLevel");
+                LoadedSkill.Experience = r.ReadUInt32("skilLExp");
+                Hero.LearnSpell(LoadedSkill);
+            }
+        }
+        static public void SaveSkills(GameClient Hero)
+        {
+            MySqlCommand cmd = new MySqlCommand(MySqlCommandType.DELETE);
+            cmd.Delete("accountsskills", "accountEntityId", Hero.Identifier);
+            cmd.Execute();
+
+            foreach (ISkill skill in Hero.Spells.Values)
+            {
+                cmd = new MySqlCommand(MySqlCommandType.INSERT);
+                cmd.Insert("accountsskills");
+                cmd.Insert("accountEntityId", Hero.Identifier);
+                cmd.Insert("skillId", skill.ID);
+                cmd.Insert("skilLLevel", skill.Level);
+                cmd.Insert("skillExp", skill.Experience);
+                cmd.Execute();
+            }
+        }
+        #endregion
+        #region Items
+        #region Inventory
         static public void LoadInventory(GameClient Hero)
         {
             MySqlCommand cmd = new MySqlCommand(MySqlCommandType.SELECT);
@@ -173,71 +255,8 @@ namespace ConquerServer_Basic
                 cmd.Execute();
             }
         }
-
-        static public void LoadProfs(GameClient Hero)
-        {
-            MySqlCommand cmd = new MySqlCommand(MySqlCommandType.SELECT);
-            cmd.Select("accountsprofs").Where("accountEntityId", Hero.Identifier);
-            MySqlReader r = new MySqlReader(cmd);
-            while (r.Read())
-            {
-                ProfPacket LoadedProf = new ProfPacket(true);
-                LoadedProf.ID = r.ReadUInt16("skillId");
-                LoadedProf.Level = r.ReadUInt16("skilLLevel");
-                LoadedProf.Experience = r.ReadUInt32("skilLExp");
-                Hero.LearnProf(LoadedProf);
-            }
-        }
-        static public void SaveProfs(GameClient Hero)
-        {
-            MySqlCommand cmd = new MySqlCommand(MySqlCommandType.DELETE);
-            cmd.Delete("accountsprofs", "accountEntityId", Hero.Identifier);
-            cmd.Execute();
-
-            foreach (ISkill prof in Hero.Profs.Values)
-            {
-                cmd = new MySqlCommand(MySqlCommandType.INSERT);
-                cmd.Insert("accountsprofs");
-                cmd.Insert("accountEntityId", Hero.Identifier);
-                cmd.Insert("skillId", prof.ID);
-                cmd.Insert("skilLLevel", prof.Level);
-                cmd.Insert("skillExp", prof.Experience);
-                cmd.Execute();
-            }
-        }
-
-        static public void LoadSkills(GameClient Hero)
-        {
-            MySqlCommand cmd = new MySqlCommand(MySqlCommandType.SELECT);
-            cmd.Select("accountsskills").Where("accountEntityId", Hero.Identifier);
-            MySqlReader r = new MySqlReader(cmd);
-            while (r.Read())
-            {
-                ISkill LoadedSkill = new SpellPacket(true);
-                LoadedSkill.ID = r.ReadUInt16("skillId");
-                LoadedSkill.Level = r.ReadUInt16("skilLLevel");
-                LoadedSkill.Experience = r.ReadUInt32("skilLExp");
-                Hero.LearnSpell(LoadedSkill);
-            }
-        }
-        static public void SaveSkills(GameClient Hero)
-        {
-            MySqlCommand cmd = new MySqlCommand(MySqlCommandType.DELETE);
-            cmd.Delete("accountsskills", "accountEntityId", Hero.Identifier);
-            cmd.Execute();
-
-            foreach (ISkill skill in Hero.Spells.Values)
-            {
-                cmd = new MySqlCommand(MySqlCommandType.INSERT);
-                cmd.Insert("accountsskills");
-                cmd.Insert("accountEntityId", Hero.Identifier);
-                cmd.Insert("skillId", skill.ID);
-                cmd.Insert("skilLLevel", skill.Level);
-                cmd.Insert("skillExp", skill.Experience);
-                cmd.Execute();
-            }
-        }
-
+        #endregion
+        #region Equips
         static public void LoadEquips(GameClient Client)
         {
             MySqlCommand cmd = new MySqlCommand(MySqlCommandType.SELECT);
@@ -256,35 +275,46 @@ namespace ConquerServer_Basic
                 LoadedItem.Durability = r.ReadUInt16("itemDurability");
                 LoadedItem.MaxDurability = r.ReadUInt16("itemMaxDurability");
                 LoadedItem.UID = ItemDataPacket.NextItemUID;
-                Client.Equip(LoadedItem, LoadedItem.Position);
-                if (LoadedItem.ID > 0)
+                if (LoadedItem.Position > 0)
                 {
-                    switch (LoadedItem.Position)
+                    if (LoadedItem.ID > 0)
                     {
-                        case 0:
-                            Client.Entity.HeadGear = LoadedItem.ID;
-                            break;
-                        case 3:
-                            Client.Entity.Armor = LoadedItem.ID;
-                            break;
-                        case 4:
-                            Client.Entity.LeftArm = LoadedItem.ID;
-                            break;
-                        case 5:
-                            Client.Entity.MainHand = LoadedItem.ID;
-                            break;
-                        /*case 6:
-                            Client.Entity.Ring = LoadedItem.ID;
-                            break;*/
-                        /*case 8:
-                            Client.Entity.Boots = LoadedItem.ID;
-                            break;*/
-                        case 9:
-                            Client.Entity.Armor = LoadedItem.ID;
-                            break;
-                        default:
-                            Console.WriteLine("Unmanaged Item : {0} - Position : {1}", LoadedItem.ID, LoadedItem.Position);
-                            break;
+                        if (Client.Equip(LoadedItem, LoadedItem.Position))
+                        {
+                            switch (LoadedItem.Position)
+                            {
+                                case 1:
+                                    Client.Entity.HeadGear = LoadedItem.ID;
+                                    break;
+                                /*case 2:
+                                    Client.Entity.Necklace = LoadedItem.ID;
+                                    break;*/
+                                case 3:
+                                    Client.Entity.Armor = LoadedItem.ID;
+                                    break;
+                                case 4:
+                                    Client.Entity.LeftArm = LoadedItem.ID;
+                                    break;
+                                case 5:
+                                    Client.Entity.MainHand = LoadedItem.ID;
+                                    break;
+                                /*case 6:
+                                    Client.Entity.Ring = LoadedItem.ID;
+                                    break;*/
+                                /*case 7:
+                                    Client.Entity.Talisman = LoadedItem.ID;
+                                    break;*/
+                                /*case 8:
+                                    Client.Entity.Boots = LoadedItem.ID;
+                                    break;*/
+                                /*case 9:
+                                    Client.Entity.Garment = LoadedItem.ID;
+                                    break;*/
+                                default:
+                                    Console.WriteLine("[LoadEquips()] Unmanaged Item : {0} - Position : {1}", LoadedItem.ID, LoadedItem.Position);
+                                    break;
+                            }
+                        }
                     }
                 }
             }
@@ -317,6 +347,8 @@ namespace ConquerServer_Basic
                 }
             }
         }
+        #endregion
+        #endregion
         #region UpdateCharacter
         static public void UpdateCharacter(string Value, string Column, GameClient Client)
         {
