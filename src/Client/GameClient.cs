@@ -558,51 +558,24 @@ namespace ConquerServer_Basic
             SendScreen(CMsg.Serialize(), SendSelf);
         }
 
-        #region Item Functions
+        #region Inventory Functions
         private void CreateInventoryInstance()
         {
             IConquerItem[] temp = new IConquerItem[m_Inventory.Count];
             m_Inventory.Values.CopyTo(temp, 0);
             Inventory = temp;
         }
-        public void AddInv(IConquerItem Item)
-        {
-            lock (m_Inventory)
-            {
-                if (m_Inventory.Count < 40)
-                {
-                    Item = new ItemDataPacket(true);
-                    Item.Position = ItemPosition.Inventory;
-                    m_Inventory.Add(Item.UID, Item);
-
-                    Item.Send(this);
-                    CreateInventoryInstance();
-
-                }
-            }
-        }
+        #region AddInventory
         public Boolean AddInventory(IConquerItem Item)
         {
-            lock (m_Inventory)
-            {
-                if (m_Inventory.Count < 40)
-                {
-                    Item.Position = ItemPosition.Inventory;
-                    m_Inventory.Add(Item.UID, Item);
-
-                    Item.Send(this);
-                    CreateInventoryInstance();
-
-                    return true;
-                }
-            }
-            return false;
+            return AddInventory(Item, 1);
         }
         public Boolean AddInventory(IConquerItem Item, byte Amount)
         {
+            if (Amount < 1) { return false; }
             lock (m_Inventory)
             {
-                if (m_Inventory.Count < (40 - Amount))
+                if (m_Inventory.Count <= (40 - Amount))
                 {
                     for (byte i = 0; i < Amount; i++)
                     {
@@ -617,6 +590,7 @@ namespace ConquerServer_Basic
             }
             return false;
         }
+        #endregion
         public void RemoveInventory(UInt32 UID)
         {
             lock (m_Inventory)
@@ -656,7 +630,6 @@ namespace ConquerServer_Basic
             }
         } 
         #endregion
-
         #region Equipment Functions
         public void SendStatMessage()
         {
@@ -665,28 +638,23 @@ namespace ConquerServer_Basic
             MessagePacket Msg = new MessagePacket(formattedMessage, (uint)Color.White, (uint)ChatType.Center);
             this.Send(Msg);
         }
-        public void RemoveEquip(byte EquipSlot)
+        public Boolean Equip(IConquerItem Item, UInt16 EquipSlot)
         {
-            IConquerItem Removed;
-            if (Equipment.TryGetValue(EquipSlot, out Removed))
+            if (!Equipment.ContainsKey(EquipSlot))
             {
-                Equipment.Remove(EquipSlot);
-
-                ItemUsagePacket UnEquipPack = new ItemUsagePacket(true);
-                UnEquipPack.UID = Removed.UID;
-                UnEquipPack.ID = ItemUsagePacket.UnequipItem;
-                Send(UnEquipPack);
-
-                ushort swap = Removed.Position;
-                Removed.Position = EquipSlot;
-                Misc.UnloadItemStats(this, Removed);
-                Removed.Position = swap;
-
+                Item.Position = EquipSlot;
+                // TODO - Can the item be equipped ?
+                // TODO - If not, don't add the item and return "false"
+                Equipment.Add(EquipSlot, Item);
+                Item.Send(this);
+                Misc.LoadItemStats(this, Item);
+                return true;
             }
-        }
+            return false;
+        } 
         public Boolean Unequip(UInt16 EquipSlot)
         {
-            IConquerItem Removed;
+            IConquerItem Removed = null;
             if (Equipment.TryGetValue(EquipSlot, out Removed))
             {
                 if (AddInventory(Removed))
@@ -707,20 +675,6 @@ namespace ConquerServer_Basic
             }
             return false;
         }
-        public Boolean Equip(IConquerItem Item, UInt16 EquipSlot)
-        {
-            if (!Equipment.ContainsKey(EquipSlot))
-            {
-                Item.Position = EquipSlot;
-                // TODO - Can the item be equipped ?
-                // TODO - If not, don't add the item and return "false"
-                Equipment.Add(EquipSlot, Item);
-                Item.Send(this);
-                Misc.LoadItemStats(this, Item);
-                return true;
-            }
-            return false;
-        } 
         #endregion
 
         public void Dies(GameClient DeadClient, byte[] Packet)
