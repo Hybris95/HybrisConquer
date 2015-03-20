@@ -227,6 +227,7 @@ namespace ConquerServer_Basic
                 {
                     #region Database Loads
                     StanderdItemStats.Load();
+                    ItemSkill.Load();
                     Npc.Load();
                     Monster.Load();
                     MonsterSpawn.Load();
@@ -287,6 +288,7 @@ namespace ConquerServer_Basic
                     MonsterSpawn.Unload();
                     Monster.Unload();
                     Npc.Unload();
+                    ItemSkill.Unload();
                     StanderdItemStats.Unload();
                     #endregion
                 }

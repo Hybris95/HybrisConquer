@@ -31,6 +31,7 @@ namespace ConquerServer_Basic
         static public Dictionary<uint, GameClient> GamePool = new Dictionary<uint, GameClient>();
         static public Dictionary<ushort, Dictionary<uint, INpc>> Npcs = new Dictionary<ushort, Dictionary<uint, INpc>>();
         static public Dictionary<uint, StanderdItemStats> ItemsStats = new Dictionary<uint, StanderdItemStats>();
+        static public Dictionary<uint, ItemSkill> ItemsSkills = new Dictionary<uint, ItemSkill>();
         static public GameClient[] Clients = new GameClient[0];
         static public Random Random = new Random();
 

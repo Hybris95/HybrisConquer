@@ -4523,6 +4523,54 @@ CREATE TABLE `plusitemstats` (
   PRIMARY KEY (`itemID`,`Plus`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
+-- 
+-- Structure de la table `itemskills`
+-- 
+
+CREATE TABLE `itemskills` (
+  `itemID` int(10) unsigned NOT NULL,
+  `skillID` smallint(6) unsigned NOT NULL,
+  PRIMARY KEY (`itemID`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+
+
+-- 
+-- Dumping data for table `itemskills`
+-- 
+
+INSERT INTO `itemskills` VALUES (725000, 1000);
+INSERT INTO `itemskills` VALUES (725001, 1001);
+INSERT INTO `itemskills` VALUES (725002, 1002);
+INSERT INTO `itemskills` VALUES (725003, 1005);
+INSERT INTO `itemskills` VALUES (725004, 1010);
+INSERT INTO `itemskills` VALUES (725005, 1045);
+INSERT INTO `itemskills` VALUES (725010, 1046);
+INSERT INTO `itemskills` VALUES (725011, 1250);
+INSERT INTO `itemskills` VALUES (725012, 1260);
+INSERT INTO `itemskills` VALUES (725013, 1290);
+INSERT INTO `itemskills` VALUES (725014, 1300);
+INSERT INTO `itemskills` VALUES (725015, 1350);
+INSERT INTO `itemskills` VALUES (725016, 1360);
+INSERT INTO `itemskills` VALUES (725018, 1380);
+INSERT INTO `itemskills` VALUES (725019, 1385);
+INSERT INTO `itemskills` VALUES (725020, 1390);
+INSERT INTO `itemskills` VALUES (725021, 1395);
+INSERT INTO `itemskills` VALUES (725022, 1400);
+INSERT INTO `itemskills` VALUES (725023, 1405);
+INSERT INTO `itemskills` VALUES (725024, 1410);
+INSERT INTO `itemskills` VALUES (725025, 1320);
+INSERT INTO `itemskills` VALUES (725026, 5010);
+INSERT INTO `itemskills` VALUES (725027, 5020);
+INSERT INTO `itemskills` VALUES (725028, 5001);
+INSERT INTO `itemskills` VALUES (725029, 5030);
+INSERT INTO `itemskills` VALUES (725030, 5040);
+INSERT INTO `itemskills` VALUES (725031, 5050);
+INSERT INTO `itemskills` VALUES (725040, 7000);
+INSERT INTO `itemskills` VALUES (725041, 7010);
+INSERT INTO `itemskills` VALUES (725042, 7020);
+INSERT INTO `itemskills` VALUES (725043, 7030);
+INSERT INTO `itemskills` VALUES (725044, 7040);
+
 --
 -- Structure de la table `itemstats`
 --

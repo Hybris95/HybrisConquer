@@ -90,6 +90,7 @@
     <Compile Include="Database\Characters.cs" />
     <Compile Include="Database\Guilds.cs" />
     <Compile Include="Database\Item Stats.cs" />
+    <Compile Include="Database\ItemSkill.cs" />
     <Compile Include="Database\Plus Item Stats.cs" />
     <Compile Include="Guilds\Guilds.cs" />
     <Compile Include="Interfaces\IAttack.cs" />

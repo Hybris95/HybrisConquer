@@ -72,153 +72,24 @@ namespace ConquerServer_Basic.Networking.Packet_Handling
                 }
                 else if (itemStats.Description == "SkillBook")
                 {
-                    // TODO - Make a Dictionary (or a database table) to store those associations
-                    ushort skillID = 0;
-                    switch (itemStats.ItemID)
+                    ItemSkill itemSkill = null;
+                    if (Kernel.ItemsSkills.TryGetValue(itemStats.ItemID, out itemSkill))
                     {
-                        case 725000:// Thunder
+                        ushort skillID = itemSkill.SkillID;
+                        ISkill skillLearnt = null;
+                        if (itemSkill.SkillID != 0 && !Client.Spells.TryGetValue(itemSkill.SkillID, out skillLearnt))
                         {
-                            skillID = 1000; break;
+                            // TODO - Check if the character can learn it (especially for spells)
+                            if (Client.LearnSpell(itemSkill.SkillID, 0))
+                            {
+                                // TODO - Delete the item
+                            }
                         }
-                        case 725001:// Fire
-                        {
-                            skillID = 1001; break;
-                        }
-                        case 725002:// Tornado
-                        {
-                            skillID = 1002; break;
-                        }
-                        case 725003:// Cure
-                        {
-                            skillID = 1005; break;
-                        }
-                        case 725004:// Lightning
-                        {
-                            skillID = 1010; break;
-                        }
-                        case 725005:// FastBlade
-                        {
-                            skillID = 1045; break;
-                        }
-                        case 725010:// ScentSword
-                        {
-                            skillID = 1046; break;
-                        }
-                        case 725011:// WideStrike
-                        {
-                            skillID = 1250; break;
-                        }
-                        case 725012:// SpeedGun
-                        {
-                            skillID = 1260; break;
-                        }
-                        case 725013:// Penetration
-                        {
-                            skillID = 1290; break;
-                        }
-                        case 725014:// Halt
-                        {
-                            skillID = 1300; break;
-                        }
-                        case 725015:// DivineHare
-                        {
-                            skillID = 1350; break;
-                        }
-                        case 725016:// NightDevil
-                        {
-                            skillID = 1360; break;
-                        }
-                        case 725018:// Dance2
-                        {
-                            skillID = 1380; break;
-                        }
-                        case 725019:// Dance3
-                        {
-                            skillID = 1385; break;
-                        }
-                        case 725020:// Dance4
-                        {
-                            skillID = 1390; break;
-                        }
-                        case 725021:// Dance5
-                        {
-                            skillID = 1395; break;
-                        }
-                        case 725022:// Dance6
-                        {
-                            skillID = 1400; break;
-                        }
-                        case 725023:// Dance7
-                        {
-                            skillID = 1405; break;
-                        }
-                        case 725024:// Dance8
-                        {
-                            skillID = 1410; break;
-                        }
-                        case 725025:// FlyingMoon
-                        {
-                            skillID = 1320; break;
-                        }
-                        case 725026:// Snow
-                        {
-                            skillID = 5010; break;
-                        }
-                        case 725027:// StrandedMonster
-                        {
-                            skillID = 5020; break;
-                        }
-                        case 725028:// SpeedLightning
-                        {
-                            skillID = 5001; break;
-                        }
-                        case 725029:// Phoenix
-                        {
-                            skillID = 5030; break;
-                        }
-                        case 725030:// Boom
-                        {
-                            skillID = 5040; break;
-                        }
-                        case 725031:// Boreas
-                        {
-                            skillID = 5050; break;
-                        }
-                        case 725040:// Seizer
-                        {
-                            skillID = 7000; break;
-                        }
-                        case 725041:// Earthquake
-                        {
-                            skillID = 7010; break;
-                        }
-                        case 725042:// Rage
-                        {
-                            skillID = 7020; break;
-                        }
-                        case 725043:// Celestial
-                        {
-                            skillID = 7030; break;
-                        }
-                        case 725044:// Roamer
-                        {
-                            skillID = 7040; break;
-                        }
-                        default:
-                        {
-                            Console.WriteLine("[UseItem()] Unmanaged SkillBook : {0}", itemStats.ItemID);
-                            break;
-                        }
-
                     }
-                    ISkill skillLearnt = null;
-                    if (skillID != 0 && !Client.Spells.TryGetValue(skillID, out skillLearnt))
+                    else
                     {
-                        // TODO - Check if the character can learn it (especially for spells)
-                        if (Client.LearnSpell(skillID, 0))
-                        {
-                            // TODO - Delete the item
-                        }
+                        Console.WriteLine("[UseItem()] Unmanaged SkillBook : {0}", itemStats.ItemID);
+                        return false;
                     }
                     return true;
                 }
